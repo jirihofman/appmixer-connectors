@@ -48,7 +48,31 @@ function getPackageJsonFiles(dir) {
     return componentJsonFiles;
 }
 
+function getTestFlowsJsonFiles(dir) {
+
+    const files = fs.readdirSync(dir);
+    const componentJsonFiles = [];
+
+    files.forEach(file => {
+
+        const filePath = path.join(dir, file);
+        const stat = fs.statSync(filePath);
+
+        if (stat.isDirectory()) {
+            componentJsonFiles.push(...getTestFlowsJsonFiles(filePath));
+        } else if (file.startsWith('test-flow') && file.endsWith('.json')) {
+            // Not interested in the node_modules folder.
+            if (filePath.indexOf('node_modules') !== -1) {
+                return;
+            }
+            componentJsonFiles.push(filePath);
+        }
+    });
+    return componentJsonFiles;
+}
+
 module.exports = {
     getComponentJsonFiles,
-    getPackageJsonFiles
+    getPackageJsonFiles,
+    getTestFlowsJsonFiles
 };
