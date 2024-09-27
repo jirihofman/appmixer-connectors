@@ -29,7 +29,7 @@ module.exports = {
             if (outputType === 'array') {
                 return await context.sendJson({ array: records }, outputPortName);
             }
-            await context.sendJson(records, outputPortName);
+              await context.sendJson(records, outputPortName);
         } else if (outputType === 'file') {
             // Into CSV file.
             const headers = Object.keys(records[0] || {});

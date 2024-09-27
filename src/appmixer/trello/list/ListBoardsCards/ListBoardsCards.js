@@ -44,7 +44,7 @@ module.exports = {
     // TODO: Move it to common function for ListBoardsCards, CreateCard, UpdateCard and use it in their component.json
     getOutputPortOptions(context, outputType) {
 
-        if (outputType === 'item') {
+        if (outputType === 'object') {
             return context.sendJson(
                 [
                     { label: 'id', value: 'id' },
@@ -84,12 +84,12 @@ module.exports = {
                 ],
                 'cards'
             );
-        } else if (outputType === 'items') {
+        } else if (outputType === 'array') {
             return context.sendJson(
                 [
                     {
                         label: 'Cards',
-                        value: 'items',
+                        value: 'array',
                         schema: {
                             type: 'array',
                             items: {

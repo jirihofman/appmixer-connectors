@@ -1,6 +1,6 @@
 {
     "name": "appmixer.trello",
-    "version": "2.1.1",
+    "version": "3.0.0",
     "changelog": {
         "1.0.0": [
             "Initial version"
@@ -24,6 +24,9 @@
             "Update component CreateCard to include checklist.",
             "Fix an issue when it was possible to create a card without a name.",
             "Add component DeleteCard, ListCardChecklists, ListChecklistItems, AddChecklistToCard, AddItemToChecklist, UpdateChecklist, UpdateChecklistItem, DeleteChecklist, DeleteChecklistItem."
+        ],
+        "3.0.0": [
+            "(breaking change) Fixed output schema for ListBoards, ListBoardsCards, ListBoardsList, ListBoardsMembers and ListCardLabels."
         ]
     }
 }

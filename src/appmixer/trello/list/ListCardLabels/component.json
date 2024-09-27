@@ -63,7 +63,7 @@
                     },
                     "messages": {
                         "in/outputType": "inputs/in/outputType",
-                        "in/boardListCardId": "inputs/in/boardListCardId"
+                        "in/boardListCardId": "foo"
                     }
                 }
             }
