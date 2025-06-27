@@ -2,14 +2,14 @@
 
 Appmixer is a workflow engine together with a web user interface that allows end-users to create business processes in an easy-to-use drag&drop UI without writing a single line of code.
 
-# Architecture
-- Use `src/appmixer` for source code of components.
-- Folder `src/examples` is only for examples and not real-world components.
+## Architecture
+- Use `src/appmixer` for source code of connectors.
+- Folder `src/examples` is only for examples and not real-world connectors and components.
 - Use `test/` for tests.
 - Use `test/utils.js` for Appmixer stub.
 
-## Connectors
-Connector consists of files service.json, auth.js, and bundle.json. The service.json file describes the service, auth.js handles authentication, and bundle.json contains metadata about the connector. Connectors are located in the `src/appmixer` folder.
+### Connector
+A connector is a set of components that interact with a specific service or API. It can have multiple components, each with its own functionality, and it is defined by a `bundle.json` file.
 
 Example folder structure for Twilio connector:
 
@@ -338,7 +338,7 @@ schema:
 
 ### Components
 A component is a self-contained unit of functionality that can be used in Appmixer workflows. It can have multiple inPorts and outPorts, and it can be used to process data, trigger actions, or perform other tasks.
-A component is defined by a `component.json` file and a "behavior" file with the same name as the component folder.
+A component is defined by a folder containing a `component.json` file and a "behavior" JavaScript file with the same name as the component folder.
 
 #### When adding new field to component.json
 > Use-case: "I want to add a new number field `itemCount` to the `MyAwesomeComponent` component."
