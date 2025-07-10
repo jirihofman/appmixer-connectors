@@ -1,0 +1,35 @@
+{
+    "name": "appmixer.vercel.core.ListTeams",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "List all teams the authenticated user is a member of.",
+    "auth": {
+        "service": "appmixer:vercel"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object"
+            },
+            "inspector": {
+                "inputs": {}
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "Teams", "value": "teams" },
+                { "label": "Team ID", "value": "teams[].id" },
+                { "label": "Team Name", "value": "teams[].name" },
+                { "label": "Team Slug", "value": "teams[].slug" },
+                { "label": "Team Avatar", "value": "teams[].avatar" },
+                { "label": "Team Created At", "value": "teams[].createdAt" },
+                { "label": "Team Created", "value": "teams[].created" },
+                { "label": "Team Creator ID", "value": "teams[].creatorId" }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjMiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMyAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTExLjUgMEwyMyAyMEgwTDExLjUgMFoiIGZpbGw9IiMwMDAiLz4KPC9zdmc+"
+}

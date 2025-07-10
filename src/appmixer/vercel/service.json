@@ -1,0 +1,8 @@
+{
+    "name": "appmixer.vercel",
+    "label": "Vercel",
+    "category": "applications",
+    "description": "Vercel is a platform for frontend frameworks and static sites, built to integrate with your headless content, commerce, or database.",
+    "version": "1.0.0",
+    "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjMiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMyAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTExLjUgMEwyMyAyMEgwTDExLjUgMFoiIGZpbGw9IiMwMDAiLz4KPC9zdmc+"
+}

@@ -1,0 +1,49 @@
+{
+    "name": "appmixer.vercel.core.ListTeamMembers",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "List members of a specified team.",
+    "auth": {
+        "service": "appmixer:vercel"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "teamId": {
+                        "type": "string"
+                    }
+                },
+                "required": ["teamId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "teamId": {
+                        "type": "text",
+                        "index": 1,
+                        "label": "Team ID",
+                        "tooltip": "The ID of the team to list members for"
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "Members", "value": "members" },
+                { "label": "Member UID", "value": "members[].uid" },
+                { "label": "Member Role", "value": "members[].role" },
+                { "label": "Member Email", "value": "members[].email" },
+                { "label": "Member Username", "value": "members[].username" },
+                { "label": "Member Name", "value": "members[].name" },
+                { "label": "Member Avatar", "value": "members[].avatar" },
+                { "label": "Member Created At", "value": "members[].createdAt" },
+                { "label": "Member Confirmed", "value": "members[].confirmed" }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjMiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMyAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTExLjUgMEwyMyAyMEgwTDExLjUgMFoiIGZpbGw9IiMwMDAiLz4KPC9zdmc+"
+}
