@@ -1,45 +1,151 @@
-# Appmixer
+# Appmixer Connectors Repository
 
-## Overview
+Always reference these instructions first and fallback to search or bash commands only when you encounter unexpected information that does not match the info here.
 
-Appmixer is a workflow engine with a web user interface that allows end-users to create business processes using a
-drag-and-drop UI without writing code.
+## Working Effectively
 
-## Project Structure
+- Bootstrap and validate the repository:
+  - `npm ci` -- installs dependencies (4 seconds). NEVER CANCEL.
+  - `npm run lint` -- runs ESLint validation (9 seconds). NEVER CANCEL.
+  - `npm run test-unit` -- runs complete test suite (30+ seconds for all tests). NEVER CANCEL. Set timeout to 120+ seconds.
+- Run specific test categories:
+  - `npm run test-unit -- --grep "ai\."` -- runs AI-related tests (1 second)
+  - `npm run test-unit -- test/utils/` -- runs utility tests (0.5 seconds)
+  - `npm run test-unit -- "test/strava/*.test.js"` -- runs specific connector tests
+- Validate changes:
+  - `npm run lint` -- ALWAYS run before committing changes
+  - `npm run test-unit -- "test/{connector}/*.test.js"` -- test specific connector after changes
 
+## Validation
+
+- ALWAYS manually test component functionality after making changes by running the relevant test files
+- ALWAYS run `npm run lint` and `npm run test-unit` before finalizing any code changes
+- Many tests require API tokens set in environment variables (e.g., `STRAVA_ACCESS_TOKEN`, `LINEAR_ACCESS_TOKEN`)
+- Tests skip gracefully when tokens are not available - this is expected behavior
+- Test results: ~298 passing tests + ~452 pending tests (due to missing API tokens)
+
+## Common Tasks
+
+The following are outputs from frequently run commands. Reference them instead of viewing, searching, or running bash commands to save time.
+
+### Repository Structure
 ```
 src/
-├── appmixer/           # Source code for connectors
+├── appmixer/           # 118+ connectors (each service has own directory)
+│   ├── strava/         # Example connector
+│   │   ├── service.json      # Service metadata
+│   │   ├── auth.js          # Authentication config
+│   │   ├── bundle.json      # Bundle metadata
+│   │   ├── quota.js         # Rate limiting (optional)
+│   │   └── core/            # Components directory
+│   │       └── FindActivities/
+│   │           ├── FindActivities.js    # Component behavior
+│   │           └── component.json       # Component config
+│   └── utils/          # Utility components
 └── examples/           # Example components (not for production)
 test/
 ├── utils.js           # Appmixer stub for testing
-└── [test files]
+├── strava/            # Test files for strava connector
+│   ├── FindActivities.test.js
+│   └── httpRequest.js  # HTTP mock for tests
+└── [196 total test files]
 ```
 
-# Connectors
+### Package.json Scripts
+```json
+{
+    "scripts": {
+        "lint": "eslint . --ext .js --no-error-on-unmatched-pattern",
+        "test-unit": "mocha --recursive --exit",
+        "test-unit-coverage": "nyc --reporter=lcov --reporter=text-summary mocha --recursive --exit"
+    }
+}
+```
 
-## Overview
+### Root Directory Contents
+```
+.eslintrc.json          # ESLint configuration
+.github/                # GitHub workflows and this file
+.gitignore              # Git ignore patterns
+README.md               # Project documentation
+package.json            # Dependencies and scripts
+package-lock.json       # Dependency lock file
+sonar-project.properties # SonarQube configuration
+src/                    # Source code
+test/                   # Test files
+```
+
+## Development Workflow
+
+### Creating/Editing Components
+1. ALWAYS follow the existing patterns in similar components
+2. Each component needs:
+   - `ComponentName.js` - behavior file with `receive()` function
+   - `component.json` - configuration with schema, inspector, auth
+3. Required input validation: throw `new context.CancelError('Field name is required!')` for missing required fields
+4. Update/delete components must return `context.sendJson({}, 'out')`
+5. Use 4 spaces for indentation (per .eslintrc.json)
+
+### Testing Components
+1. Create test file in `test/{connector}/{ComponentName}.test.js`
+2. Follow existing test patterns (see `test/strava/FindActivities.test.js`)
+3. Use environment variables for API tokens (e.g., `process.env.STRAVA_ACCESS_TOKEN`)
+4. Tests should skip gracefully when tokens are missing
+5. Include mock `httpRequest.js` for API calls
+
+### File Patterns
+- Authentication: `auth.js` with type 'apiKey' or 'oauth2'
+- Service metadata: `service.json` with name, label, description, version, icon
+- Bundle info: `bundle.json` with version and changelog
+- Component config: `component.json` with name, auth, inPorts, outPorts
+- Component behavior: `{ComponentName}.js` with module.exports and receive() function
+
+### Environment Setup
+- No build step required - JavaScript files run directly
+- Create `.env` file in test directory for API tokens
+- API tokens format: `{SERVICE}_ACCESS_TOKEN` or `{SERVICE}_API_KEY`
+- Tests automatically skip when required tokens are missing
+
+### Validation Requirements
+- ESLint must pass: `npm run lint` (9 seconds)
+- Tests must not introduce new failures: `npm run test-unit` 
+- Component JSON schemas must be valid
+- All required inputs must be validated in behavior files
+- Follow existing code style (camelCase variables, 4-space indent)
+
+## CI/CD Integration
+
+The repository has GitHub Actions workflows:
+- `.github/workflows/nodejs.yml` - runs `npm run lint` and `npm run test-unit` on PRs
+- `.github/workflows/sonar.yml` - SonarQube analysis on dev branch
+- `.github/workflows/marketplace.yml` - marketplace-related workflows
+
+All changes must pass linting and not break existing tests to merge successfully.
+
+## Architecture Notes
+
+- **Connectors**: Integration with external services (strava, linear, slack, etc.)
+- **Components**: Individual units of functionality within connectors
+- **Authentication**: Handled at connector level (oauth2 or apiKey)
+- **Testing**: Mocha-based with custom Appmixer context stubs
+- **Rate Limiting**: quota.js files define API usage limits
+- **Context**: Components receive context object with auth, httpRequest, sendJson methods
+
+## Troubleshooting
+
+- **Lint errors**: Check .eslintrc.json rules, most common: indentation, quotes, spacing
+- **Test failures**: Verify API tokens are set, check component input validation
+- **Missing dependencies**: Run `npm ci` to reinstall
+- **Component not working**: Validate component.json schema and required field handling in behavior file
+
+Always run validation commands with adequate timeouts and never cancel long-running operations.
+
+# Technical Reference Documentation
+
+## Connectors Overview
 
 Connectors are integrations with external services. Each connector contains authentication logic, service metadata, and
 one or more components that perform specific actions.
-
-## Connector Structure
-
-```
-connector_name/
-├── service.json       # Service metadata and description
-├── auth.js           # Authentication configuration
-├── bundle.json       # Bundle metadata and changelog
-├── package.json      # Dependencies (optional)
-├── quota.js          # Rate limiting rules (optional)
-└── core/             # Default module for components
-    ├── ComponentName/
-    │   ├── ComponentName.js    # Component behavior/logic
-    │   └── component.json      # Component configuration
-    └── AnotherComponent/
-        ├── AnotherComponent.js
-        └── component.json
-```
 
 documentation: https://docs.appmixer.com/building-connectors/example-component#component-behaviour-sms-sendsms-sendsms.js
 
