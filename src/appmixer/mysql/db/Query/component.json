@@ -3,7 +3,7 @@
     "author": "David Durman <david@client.io>",
     "description": "Query your MySQL database.",
     "private": false,
-    "version": "1.0.2",
+    "version": "1.0.3",
     "auth": {
         "service": "appmixer:mysql"
     },
@@ -13,9 +13,14 @@
             "schema": {
                 "type": "object",
                 "properties": {
-                    "query": { "type": "string" },
+                    "query": { 
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 10000
+                    },
                     "outputType": { "type": "string" }
-                }
+                },
+                "required": ["query", "outputType"]
             },
             "inspector": {
                 "inputs": {
