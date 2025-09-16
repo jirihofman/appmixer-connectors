@@ -64,7 +64,7 @@ describe('clerk lib.js', () => {
             });
 
             assert.strictEqual(context.sendJson.callCount, 2, 'context.sendJson should be called twice');
-            
+
             const firstCall = context.sendJson.getCall(0).args;
             assert.deepStrictEqual(firstCall[0], { id: '1', name: 'John', index: 0, count: 2 });
             assert.strictEqual(firstCall[1], 'users');
@@ -132,10 +132,10 @@ describe('clerk lib.js', () => {
 
             assert(context.saveFileStream.calledOnce, 'context.saveFileStream should be called once');
             assert(context.sendJson.calledOnce, 'context.sendJson should be called once');
-            
+
             const saveFileArgs = context.saveFileStream.getCall(0).args;
             assert.strictEqual(saveFileArgs[0], 'test-export-TestComponent.csv');
-            
+
             const buffer = saveFileArgs[1];
             const csvContent = buffer.toString('utf8');
             assert(csvContent.includes('id,name,age'));
@@ -208,27 +208,27 @@ describe('clerk lib.js', () => {
         };
 
         it('should return object options for object output type', async () => {
-            const result = await lib.getOutputPortOptions(context, 'object', mockItemSchema, { label: 'Users' });
+            await lib.getOutputPortOptions(context, 'object', mockItemSchema, { label: 'Users' });
 
             assert(context.sendJson.calledOnce, 'context.sendJson should be called once');
             const args = context.sendJson.getCall(0).args;
             const options = args[0];
-            
+
             assert(Array.isArray(options), 'Options should be an array');
             assert.strictEqual(options.length, 5, 'Should have 5 options (3 fields + index + count)');
-            
+
             // Check that schema titles are used as labels
             const idOption = options.find(opt => opt.value === 'id');
             assert.strictEqual(idOption.label, 'User ID');
-            
+
             const nameOption = options.find(opt => opt.value === 'name');
             assert.strictEqual(nameOption.label, 'User Name');
-            
+
             // Check index and count options
             const indexOption = options.find(opt => opt.value === 'index');
             assert.strictEqual(indexOption.label, 'Current Item Index');
             assert.deepStrictEqual(indexOption.schema, { type: 'integer' });
-            
+
             const countOption = options.find(opt => opt.value === 'count');
             assert.strictEqual(countOption.label, 'Items Count');
             assert.deepStrictEqual(countOption.schema, { type: 'integer' });
@@ -240,7 +240,7 @@ describe('clerk lib.js', () => {
             assert(context.sendJson.calledOnce, 'context.sendJson should be called once');
             const args = context.sendJson.getCall(0).args;
             const options = args[0];
-            
+
             assert(Array.isArray(options), 'Options should be an array');
             assert.strictEqual(options.length, 5, 'Should have 5 options (3 fields + index + count)');
         });
@@ -251,13 +251,13 @@ describe('clerk lib.js', () => {
             assert(context.sendJson.calledOnce, 'context.sendJson should be called once');
             const args = context.sendJson.getCall(0).args;
             const options = args[0];
-            
+
             assert(Array.isArray(options), 'Options should be an array');
             assert.strictEqual(options.length, 2, 'Should have 2 options (count + result)');
-            
+
             const countOption = options.find(opt => opt.value === 'count');
             assert.strictEqual(countOption.label, 'Items Count');
-            
+
             const resultOption = options.find(opt => opt.value === 'result');
             assert.strictEqual(resultOption.label, 'Users List');
             assert.deepStrictEqual(resultOption.schema, {
@@ -275,10 +275,10 @@ describe('clerk lib.js', () => {
             assert(context.sendJson.calledOnce, 'context.sendJson should be called once');
             const args = context.sendJson.getCall(0).args;
             const options = args[0];
-            
+
             assert(Array.isArray(options), 'Options should be an array');
             assert.strictEqual(options.length, 1, 'Should have 1 option (fileId)');
-            
+
             const fileOption = options[0];
             assert.strictEqual(fileOption.label, 'File ID');
             assert.strictEqual(fileOption.value, 'fileId');

@@ -55,11 +55,11 @@ describe('Clerk CreateOrganization', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         const httpCall = context.httpRequest.getCall(0);
-        
+
         assert.strictEqual(httpCall.args[0].method, 'POST');
         assert.strictEqual(httpCall.args[0].url, 'https://api.clerk.com/v1/organizations');
         assert.strictEqual(httpCall.args[0].headers.Authorization, 'Bearer test_api_key');
-        
+
         const requestBody = httpCall.args[0].data;
         assert.strictEqual(requestBody.name, 'Test Organization');
 
@@ -121,7 +121,7 @@ describe('Clerk CreateOrganization', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const requestBody = httpCall.args[0].data;
-        
+
         assert.strictEqual(requestBody.name, 'Another Organization');
         assert.strictEqual(requestBody.slug, 'another-org');
         assert.strictEqual(requestBody.max_allowed_memberships, 100);
@@ -174,7 +174,7 @@ describe('Clerk CreateOrganization', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const requestBody = httpCall.args[0].data;
-        
+
         assert.strictEqual(requestBody.name, 'Complete Organization');
         assert.strictEqual(requestBody.slug, 'complete-org');
         assert.strictEqual(requestBody.max_allowed_memberships, 50);

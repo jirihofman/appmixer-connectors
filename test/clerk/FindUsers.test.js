@@ -30,7 +30,7 @@ describe('Clerk FindUsers', () => {
                 content: {}
             }
         };
-        
+
         // Stub the lib function
         sinon.stub(lib, 'sendArrayOutput');
     });
@@ -53,7 +53,7 @@ describe('Clerk FindUsers', () => {
                 email_addresses: [{ email_address: 'john@example.com' }]
             },
             {
-                id: 'user_456', 
+                id: 'user_456',
                 first_name: 'John',
                 last_name: 'Smith',
                 email_addresses: [{ email_address: 'john.smith@example.com' }]
@@ -66,7 +66,7 @@ describe('Clerk FindUsers', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         const httpCall = context.httpRequest.getCall(0);
-        
+
         assert.strictEqual(httpCall.args[0].method, 'GET');
         assert(httpCall.args[0].url.includes('https://api.clerk.com/v1/users'));
         assert(httpCall.args[0].url.includes('email_address_query=john%40example.com'));
@@ -98,7 +98,7 @@ describe('Clerk FindUsers', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         const httpCall = context.httpRequest.getCall(0);
-        
+
         assert(httpCall.args[0].url.includes('phone_number_query=%2B1234567890'));
 
         assert(lib.sendArrayOutput.calledOnce, 'lib.sendArrayOutput should be called once');
@@ -128,7 +128,7 @@ describe('Clerk FindUsers', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         const httpCall = context.httpRequest.getCall(0);
-        
+
         assert(httpCall.args[0].url.includes('username_query=johndoe'));
 
         assert(lib.sendArrayOutput.calledOnce, 'lib.sendArrayOutput should be called once');
@@ -179,7 +179,7 @@ describe('Clerk FindUsers', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const url = httpCall.args[0].url;
-        
+
         assert(url.includes('email_address_query=john%40example.com'));
         assert(url.includes('username_query=johndoe'));
         assert(url.includes('phone_number_query=%2B1234567890'));

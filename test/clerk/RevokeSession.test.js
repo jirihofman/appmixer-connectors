@@ -45,7 +45,7 @@ describe('Clerk RevokeSession', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         const httpCall = context.httpRequest.getCall(0);
-        
+
         assert.strictEqual(httpCall.args[0].method, 'POST');
         assert.strictEqual(httpCall.args[0].url, `https://api.clerk.com/v1/sessions/${sessionId}/revoke`);
         assert.strictEqual(httpCall.args[0].headers.Authorization, 'Bearer test_api_key');
@@ -218,7 +218,7 @@ describe('Clerk RevokeSession', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         assert(context.sendJson.calledOnce, 'sendJson should be called once');
-        
+
         const sendJsonCall = context.sendJson.getCall(0);
         // Component always returns empty object regardless of API response
         assert.deepStrictEqual(sendJsonCall.args[0], {});

@@ -54,11 +54,11 @@ describe('Clerk CreateUser', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         const httpCall = context.httpRequest.getCall(0);
-        
+
         assert.strictEqual(httpCall.args[0].method, 'POST');
         assert.strictEqual(httpCall.args[0].url, 'https://api.clerk.com/v1/users');
         assert.strictEqual(httpCall.args[0].headers.Authorization, 'Bearer test_api_key');
-        
+
         const requestBody = httpCall.args[0].data;
         assert.strictEqual(requestBody.first_name, 'John');
         assert.strictEqual(requestBody.last_name, 'Doe');
@@ -92,10 +92,10 @@ describe('Clerk CreateUser', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const requestBody = httpCall.args[0].data;
-        
+
         assert.deepStrictEqual(requestBody.email_address, [
             'jane@example.com',
-            'second@example.com', 
+            'second@example.com',
             'third@example.com'
         ]);
     });
@@ -121,7 +121,7 @@ describe('Clerk CreateUser', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const requestBody = httpCall.args[0].data;
-        
+
         assert.deepStrictEqual(requestBody.phone_number, ['+1234567890', '+0987654321']);
     });
 
@@ -145,7 +145,7 @@ describe('Clerk CreateUser', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const requestBody = httpCall.args[0].data;
-        
+
         assert.deepStrictEqual(requestBody.web3_wallet, ['0x1234567890123456789012345678901234567890']);
     });
 
@@ -173,7 +173,7 @@ describe('Clerk CreateUser', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const requestBody = httpCall.args[0].data;
-        
+
         assert.strictEqual(requestBody.external_id, 'ext_123');
         assert.strictEqual(requestBody.first_name, 'Test');
         assert.strictEqual(requestBody.last_name, 'User');
@@ -200,7 +200,7 @@ describe('Clerk CreateUser', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const requestBody = httpCall.args[0].data;
-        
+
         assert.strictEqual(requestBody.delete_self_enabled, true);
     });
 
@@ -225,7 +225,7 @@ describe('Clerk CreateUser', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const requestBody = httpCall.args[0].data;
-        
+
         // Should not include empty array fields
         assert(!requestBody.hasOwnProperty('email_address'));
         assert(!requestBody.hasOwnProperty('phone_number'));
@@ -295,7 +295,7 @@ describe('Clerk CreateUser', () => {
 
         const httpCall = context.httpRequest.getCall(0);
         const requestBody = httpCall.args[0].data;
-        
+
         // Should filter out empty strings
         assert.deepStrictEqual(requestBody.email_address, ['valid@example.com', 'other@example.com']);
         assert.deepStrictEqual(requestBody.phone_number, ['+1234567890', '+0987654321']);

@@ -55,7 +55,7 @@ describe('Clerk GetUser', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         const httpCall = context.httpRequest.getCall(0);
-        
+
         assert.strictEqual(httpCall.args[0].method, 'GET');
         assert.strictEqual(httpCall.args[0].url, `https://api.clerk.com/v1/users/${userId}`);
         assert.strictEqual(httpCall.args[0].headers.Authorization, 'Bearer test_api_key');
@@ -150,7 +150,7 @@ describe('Clerk GetUser', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         assert(context.sendJson.calledOnce, 'sendJson should be called once');
-        
+
         const sendJsonCall = context.sendJson.getCall(0);
         assert.deepStrictEqual(sendJsonCall.args[0], mockUser);
         assert.strictEqual(sendJsonCall.args[1], 'out');
@@ -216,7 +216,7 @@ describe('Clerk GetUser', () => {
 
         assert(context.httpRequest.calledOnce, 'httpRequest should be called once');
         assert(context.sendJson.calledOnce, 'sendJson should be called once');
-        
+
         const sendJsonCall = context.sendJson.getCall(0);
         assert.deepStrictEqual(sendJsonCall.args[0], mockUser);
         assert.strictEqual(sendJsonCall.args[1], 'out');
