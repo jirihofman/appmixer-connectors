@@ -14,16 +14,27 @@
                 "type": "object",
                 "properties": {
                     "query": { "type": "string" },
+                    "params": { 
+                        "type": "array",
+                        "items": { "type": "string" }
+                    },
                     "outputType": { "type": "string" }
-                }
+                },
+                "required": ["query", "outputType"]
             },
             "inspector": {
                 "inputs": {
                     "query": {
-                        "type": "text",
+                        "type": "textarea",
                         "index": 0,
                         "label": "SQL Query",
-                        "tooltip": "Enter an SQL query."
+                        "tooltip": "Enter an SQL query. Use ? placeholders for parameters to prevent SQL injection."
+                    },
+                    "params": {
+                        "type": "text",
+                        "index": 1,
+                        "label": "Parameters (JSON Array)",
+                        "tooltip": "JSON array of parameters for ? placeholders in the query. Example: [\"value1\", 123, \"value2\"]"
                     },
                     "outputType": {
                         "type": "select",
@@ -32,7 +43,7 @@
                             { "content": "All rows at once", "value": "rows" },
                             { "content": "Stream to file", "value": "file" }
                         ],
-                        "index": 1,
+                        "index": 2,
                         "label": "Output Type",
                         "tooltip": "Choose whether you want to receive the result set as one complete list, or one row at a time or stream the rows to a file. For large datasets, streaming the rows to a file is the most efficient method."
                     }
