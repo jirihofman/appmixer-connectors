@@ -10,7 +10,10 @@ module.exports = {
         const { query, outputType } = context.messages.in.content;
 
         try {
-            const queryResponse = await runQuery({ context: context.auth, query, stream: outputType === 'file' });
+            // Note: The Query component accepts user-defined SQL queries.
+            // Users are responsible for using parameterized queries or proper escaping.
+            // For programmatic queries, see other components that use parameterization.
+            const queryResponse = await runQuery({ context: context.auth, query, params: [], stream: outputType === 'file' });
             await this.handleQueryResponse(context, queryResponse, outputType);
         } catch (error) {
             throw new context.CancelError('Error executing query: ' + error);

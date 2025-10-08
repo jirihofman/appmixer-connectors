@@ -1,6 +1,6 @@
 {
     "name": "appmixer.mssql",
-    "version": "1.0.3",
+    "version": "1.1.0",
     "changelog": {
         "1.0.0": [
             "Initial version"
@@ -10,6 +10,12 @@
         ],
         "1.0.3":[
             "Bug Fix: Support for non SELECT Queries in `Query` component."
+        ],
+        "1.1.0": [
+            "(security) Added parameterized query support to prevent SQL injection vulnerabilities.",
+            "Added escapeIdentifier and sanitizeOperator helper methods to common.js.",
+            "Updated ListTables component to use parameterized queries.",
+            "Updated runQuery function to support parameter binding."
         ]
     }
 }

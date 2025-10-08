@@ -75,11 +75,19 @@ async function createConnection(context) {
     return await mssql.connect(opt);
 }
 
-async function runQuery({ context, query, stream = false }) {
+async function runQuery({ context, query, params = [], stream = false }) {
 
     const conn = await createConnection(context);
     const request = new mssql.Request(conn);
     request.stream = stream;
+
+    // Add parameters to the request if provided
+    if (params && params.length > 0) {
+        params.forEach((param, index) => {
+            // Use @p1, @p2, etc. as parameter names
+            request.input(`p${index + 1}`, param);
+        });
+    }
 
     if (stream) {
         request.query(query);
@@ -88,6 +96,14 @@ async function runQuery({ context, query, stream = false }) {
         return await request.query(query);
     }
 }
+
+// Safe operators whitelist for query filtering
+const SAFE_OPERATORS = new Set([
+    '=', '!=', '<>', '<', '<=', '>', '>=',
+    'CONTAINS', 'NOT CONTAINS', 'STARTS WITH', 'NOT STARTS WITH',
+    'ENDS WITH', 'NOT ENDS WITH', 'IN', 'NOT IN',
+    'LIKE', 'NOT LIKE', 'IS NULL', 'IS NOT NULL'
+]);
 
 module.exports = {
 
@@ -100,7 +116,7 @@ module.exports = {
             let conn;
             try {
 
-                const stream = await runQuery({ context: context.auth, query, stream: true });
+                const stream = await runQuery({ context: context.auth, query, params, stream: true });
                 const concurrency = parseInt(context.config.concurrency, 10) || 100;
 
                 const streamProcessor = new StreamProcessor(context);
@@ -150,6 +166,38 @@ module.exports = {
         return returnStoreId;
     },
 
+    /**
+     * Sanitizes and validates SQL operators to prevent SQL injection.
+     * @param {string} operator - The operator to sanitize
+     * @param {object} context - The component context (for error handling)
+     * @returns {string} The sanitized operator in uppercase
+     * @throws {CancelError} If the operator is not in the safe list
+     */
+    sanitizeOperator: (operator, context) => {
+        const trimmedOperator = (operator ?? '').trim();
+        const normalizedOperator = trimmedOperator.toUpperCase();
+
+        if (!SAFE_OPERATORS.has(normalizedOperator)) {
+            throw new context.CancelError(`Unsupported operator "${operator}"`);
+        }
+
+        return normalizedOperator;
+    },
+
+    /**
+     * Escapes a SQL Server identifier (table name, column name, schema name, etc.)
+     * to prevent SQL injection by wrapping it in square brackets.
+     * @param {string} identifier - The identifier to escape
+     * @returns {string} The escaped identifier wrapped in square brackets
+     */
+    escapeIdentifier: (identifier) => {
+        // SQL Server uses square brackets for identifiers
+        // Escape any existing square brackets by doubling them
+        const escaped = identifier.replace(/\]/g, ']]');
+        return `[${escaped}]`;
+    },
+
     runQuery,
-    createConnection
+    createConnection,
+    SAFE_OPERATORS
 };
