@@ -151,5 +151,24 @@ module.exports = {
         return returnStoreId;
     },
 
+    /**
+     * Escapes a MySQL identifier (table name, column name, database name, etc.)
+     * to prevent SQL injection.
+     * @param {string} identifier - The identifier to escape
+     * @returns {string} The escaped identifier wrapped in backticks
+     */
+    escapeIdentifier: (identifier) => {
+        return mysql.escapeId(identifier);
+    },
+
+    /**
+     * Escapes a literal value for use in SQL queries to prevent SQL injection.
+     * @param {*} literal - The literal value to escape
+     * @returns {string} The escaped literal with proper quoting
+     */
+    escapeLiteral: (literal) => {
+        return mysql.escape(literal);
+    },
+
     runQuery
 };
