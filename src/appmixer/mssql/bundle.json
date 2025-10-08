@@ -15,7 +15,8 @@
             "(security) Added parameterized query support to prevent SQL injection vulnerabilities.",
             "Added escapeIdentifier and sanitizeOperator helper methods to common.js.",
             "Updated ListTables component to use parameterized queries.",
-            "Updated runQuery function to support parameter binding."
+            "Updated runQuery function to support parameter binding with automatic ? to @p placeholder conversion.",
+            "Existing components (NewRow, UpdatedRow, WatchRows) now benefit from parameterized query support."
         ]
     }
 }

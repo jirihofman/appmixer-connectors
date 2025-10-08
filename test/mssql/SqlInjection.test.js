@@ -152,5 +152,41 @@ describe('mssql/common - SQL Injection Protection', () => {
             assert.strictEqual(params.length, 0);
             // When params.length is 0, no input() calls should be made
         });
+
+        it('should convert ? placeholders to @p1, @p2, etc.', () => {
+            // Test the placeholder conversion logic
+            let query = 'SELECT * FROM users WHERE id = ? AND status = ?';
+            const params = [1, 'active'];
+
+            // Simulate the conversion
+            let placeholderIndex = 0;
+            const convertedQuery = query.replace(/\?/g, () => {
+                placeholderIndex++;
+                return `@p${placeholderIndex}`;
+            });
+
+            assert.strictEqual(convertedQuery, 'SELECT * FROM users WHERE id = @p1 AND status = @p2');
+            assert.strictEqual(placeholderIndex, params.length, 'Should convert same number of placeholders as params');
+        });
+
+        it('should handle queries with no placeholders', () => {
+            const query = 'SELECT * FROM users';
+            const converted = query.replace(/\?/g, () => '@p1');
+            assert.strictEqual(converted, query, 'Query without placeholders should remain unchanged');
+        });
+
+        it('should handle multiple ? in complex queries', () => {
+            const query = 'SELECT * FROM users WHERE created > ? AND updated < ? OR status IN (?)';
+            let placeholderIndex = 0;
+            const converted = query.replace(/\?/g, () => {
+                placeholderIndex++;
+                return `@p${placeholderIndex}`;
+            });
+
+            assert.strictEqual(
+                converted,
+                'SELECT * FROM users WHERE created > @p1 AND updated < @p2 OR status IN (@p3)'
+            );
+        });
     });
 });

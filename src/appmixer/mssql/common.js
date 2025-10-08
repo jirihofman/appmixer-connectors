@@ -83,10 +83,20 @@ async function runQuery({ context, query, params = [], stream = false }) {
 
     // Add parameters to the request if provided
     if (params && params.length > 0) {
+        // Replace ? placeholders with @p1, @p2, etc. for MSSQL compatibility
+        let processedQuery = query;
+        let placeholderIndex = 0;
+        processedQuery = processedQuery.replace(/\?/g, () => {
+            placeholderIndex++;
+            return `@p${placeholderIndex}`;
+        });
+
+        // Bind parameters
         params.forEach((param, index) => {
-            // Use @p1, @p2, etc. as parameter names
             request.input(`p${index + 1}`, param);
         });
+
+        query = processedQuery;
     }
 
     if (stream) {
