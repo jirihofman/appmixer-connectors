@@ -27,14 +27,24 @@ describe('lib.js', () => {
     describe('normalizeMultiselectInput', () => {
         const context = { CancelError: class CancelError extends Error {} };
 
-        it('should join array of userIds', () => {
+        it('should return array of userIds', () => {
             const result = require('../../src/appmixer/slack/lib').normalizeMultiselectInput(['U1', 'U2', 'U3'], 8, context, 'userIds');
-            assert.strictEqual(result, 'U1,U2,U3');
+            assert.deepStrictEqual(result, ['U1', 'U2', 'U3']);
         });
 
-        it('should return string userId as is', () => {
-            const result = require('../../src/appmixer/slack/lib').normalizeMultiselectInput('U1', 8, context, 'userIds');
-            assert.strictEqual(result, 'U1');
+        it('should convert comma-separated string to array', () => {
+            const result = require('../../src/appmixer/slack/lib').normalizeMultiselectInput('U1,U2,U3', 8, context, 'userIds');
+            assert.deepStrictEqual(result, ['U1', 'U2', 'U3']);
+        });
+
+        it('should trim whitespace from comma-separated string', () => {
+            const result = require('../../src/appmixer/slack/lib').normalizeMultiselectInput('U1, U2 , U3', 8, context, 'userIds');
+            assert.deepStrictEqual(result, ['U1', 'U2', 'U3']);
+        });
+
+        it('should filter out empty strings from comma-separated input', () => {
+            const result = require('../../src/appmixer/slack/lib').normalizeMultiselectInput('U1,,U2,', 8, context, 'userIds');
+            assert.deepStrictEqual(result, ['U1', 'U2']);
         });
 
         it('should throw if array exceeds maxItems', () => {
@@ -43,10 +53,23 @@ describe('lib.js', () => {
             }, context.CancelError);
         });
 
+        it('should throw if comma-separated string exceeds maxItems', () => {
+            const largeString = Array.from({ length: 11 }, (_, i) => `U${i + 1}`).join(',');
+            assert.throws(() => {
+                require('../../src/appmixer/slack/lib').normalizeMultiselectInput(largeString, 10, context, 'userIds');
+            }, context.CancelError);
+        });
+
         it('should throw if input is not array or string', () => {
             assert.throws(() => {
                 require('../../src/appmixer/slack/lib').normalizeMultiselectInput(123, 8, context, 'userIds');
             }, context.CancelError);
+        });
+
+        it('should not throw when maxItems is Infinity', () => {
+            const largeArray = Array.from({ length: 50 }, (_, i) => `U${i + 1}`);
+            const result = require('../../src/appmixer/slack/lib').normalizeMultiselectInput(largeArray, Infinity, context, 'userIds');
+            assert.deepStrictEqual(result, largeArray);
         });
     });
 

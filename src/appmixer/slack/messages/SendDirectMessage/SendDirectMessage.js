@@ -12,7 +12,7 @@ module.exports = {
 
         // First, open a conversation with the user(s). It will return the channel ID.
         const web = new WebClient(context.auth.accessToken);
-        const response = await web.conversations.open({ users: ids, prevent_creation: true });
+        const response = await web.conversations.open({ users: ids.join(','), prevent_creation: true });
 
         if (!response?.channel?.id) {
             const errorDetails = JSON.stringify({ channel: response.channel, userIds });

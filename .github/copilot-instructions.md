@@ -955,6 +955,18 @@ Behavior JS file MUST follow these rules:
 
 ## Common Patterns
 
+### normalizeMultiselectInput Helper Function
+
+The `normalizeMultiselectInput` helper function is available in connector `lib.js` files to normalize multiselect inputs (arrays or comma-separated strings) to array format.
+
+**Important Limitation**: When a connector's API expects comma-separated strings (e.g., Slack API's `users` parameter), you must join the returned array before passing it to the API:
+
+```javascript
+const ids = lib.normalizeMultiselectInput(userIds, 8, context, 'userIds');
+// Join the array when calling API that expects comma-separated string
+await api.call({ users: ids.join(',') });
+```
+
 ### When editing existing or creating new component
 
 IMPORTANT! refer [./prompts/instructions.componentStandards.md](./prompts/instructions.componentStandards.md) for comprehensive guidelines on creating or editing components in Appmixer.

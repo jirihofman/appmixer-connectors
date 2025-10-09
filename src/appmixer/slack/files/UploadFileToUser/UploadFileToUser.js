@@ -11,7 +11,7 @@ module.exports = {
         const ids = lib.normalizeMultiselectInput(userIds, 8, context, 'userIds');
 
         const web = new WebClient(context.auth.accessToken);
-        const { channel } = await web.conversations.open({ users: ids, prevent_creation: true });
+        const { channel } = await web.conversations.open({ users: ids.join(','), prevent_creation: true });
         if (!channel || !channel.id) {
             const errorDetails = JSON.stringify({ channel, userIds });
             throw new context.CancelError('Could not open a conversation with a user. Details: ' + errorDetails);

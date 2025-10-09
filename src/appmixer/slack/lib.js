@@ -10,24 +10,31 @@ const { createHmac } = require('node:crypto');
 
 module.exports = {
     /**
-     * Normalize multiselect input (array or string) to comma-separated string for Slack API.
+     * Normalize multiselect input (array or string) to array format for Slack API.
      * @param {string|string[]} input
      * @param {number} maxItems
      * @param {object} context
      * @param {string} fieldName
-     * @returns {string}
+     * @returns {string[]}
      */
     normalizeMultiselectInput(input, maxItems = 8, context, fieldName) {
+
+        let normalizedInput;
+
         if (Array.isArray(input)) {
-            if (input.length > maxItems) {
-                throw new context.CancelError(`You can send a message to a maximum of ${maxItems} users at once`);
-            }
-            return input.join(',');
+            normalizedInput = input;
         } else if (typeof input === 'string') {
-            return input;
+            // Handle comma-separated string
+            normalizedInput = input.split(',').map(item => item.trim()).filter(item => item.length > 0);
         } else {
             throw new context.CancelError(`${fieldName} must be a string or an array`);
         }
+
+        if (maxItems !== Infinity && normalizedInput.length > maxItems) {
+            throw new context.CancelError(`You can send a message to a maximum of ${maxItems} users at once`);
+        }
+
+        return normalizedInput;
     },
 
     /**
