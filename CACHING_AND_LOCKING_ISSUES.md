@@ -42,6 +42,12 @@ try {
 
 ## Issue Categories
 
+> **Note:** Components can be used as sources in two ways:
+> 1. By checking `context.messages.in.content.isSource` - used when called from another component's inspector
+> 2. By checking `context.properties.variableFetch` - used when called from variable/dropdown fields
+> 
+> Both serve the same purpose: to provide data for dropdowns in the UI. Components checking either flag are subject to the same concurrency issues.
+
 ### Category 1: Components with Caching but NO Lock
 
 These components have the same issue as the original `ListBoards` - they use caching but don't acquire a lock before checking/setting cache, leading to potential race conditions.
@@ -395,6 +401,179 @@ Add caching with lock for `isSource` calls.
 **Recommended Enhancement:**
 Add caching with lock for `isSource` calls.
 
+### Category 3: Components Using `variableFetch` WITHOUT Caching or Lock
+
+These components use the `variableFetch` property instead of `isSource`, but serve the same purpose - they provide data for dropdowns in the UI. Like Category 2 components, they don't have race conditions but could benefit from caching.
+
+#### 20. Microsoft OneDrive - ListGroups
+
+**File:** `src/appmixer/microsoft/onedrive/ListGroups/ListGroups.js`
+
+**Current Implementation:**
+```javascript
+async receive(context) {
+    try {
+        const groups = await listItems(context, 'groups?');
+        return context.sendJson({ groups }, 'out');
+    } catch (err) {
+        if (context.properties.variableFetch) {
+            return context.sendJson({ groups: [] }, 'out');
+        }
+        context.log({ stage: 'Error', err });
+        throw new Error(err);
+    }
+}
+```
+
+**Issue:**
+- No caching
+- No locking
+- Uses `variableFetch` flag for error handling
+
+**Used as Source By:**
+- `src/appmixer/microsoft/onedrive/ListFiles/component.json`
+- `src/appmixer/microsoft/onedrive/MoveFileOrFolder/component.json`
+
+**Recommended Enhancement:**
+Add caching with lock similar to other list components, checking `variableFetch` flag.
+
+#### 21. Microsoft OneDrive - ListSites
+
+**File:** `src/appmixer/microsoft/onedrive/ListSites/ListSites.js`
+
+**Current Implementation:**
+```javascript
+async receive(context) {
+    try {
+        const sites = await listItems(context, 'sites?search=&');
+        return context.sendJson({ sites }, 'out');
+    } catch (err) {
+        if (context.properties.variableFetch) {
+            return context.sendJson({ sites: [] }, 'out');
+        }
+        context.log({ stage: 'Error', err });
+        throw new Error(err);
+    }
+}
+```
+
+**Issue:**
+- No caching
+- No locking
+- Uses `variableFetch` flag for error handling
+
+**Used as Source By:**
+- `src/appmixer/microsoft/onedrive/ListFiles/component.json`
+- `src/appmixer/microsoft/onedrive/MoveFileOrFolder/component.json`
+
+**Recommended Enhancement:**
+Add caching with lock for `variableFetch` calls.
+
+#### 22. Microsoft OneDrive - ListUsers
+
+**File:** `src/appmixer/microsoft/onedrive/ListUsers/ListUsers.js`
+
+**Current Implementation:**
+```javascript
+async receive(context) {
+    try {
+        const users = await listItems(context, 'users?');
+        return context.sendJson({ users }, 'out');
+    } catch (err) {
+        if (context.properties.variableFetch) {
+            return context.sendJson({ users: [] }, 'out');
+        }
+        context.log({ stage: 'Error', err });
+        throw new Error(err);
+    }
+}
+```
+
+**Issue:**
+- No caching
+- No locking
+- Uses `variableFetch` flag for error handling
+
+**Used as Source By:**
+- `src/appmixer/microsoft/onedrive/ListFiles/component.json`
+- `src/appmixer/microsoft/onedrive/MoveFileOrFolder/component.json`
+
+**Recommended Enhancement:**
+Add caching with lock for `variableFetch` calls.
+
+#### 23. Microsoft OneDrive - ListDrives
+
+**File:** `src/appmixer/microsoft/onedrive/ListDrives/ListDrives.js`
+
+**Current Implementation:**
+```javascript
+async receive(context) {
+    try {
+        const drives = await listItems(context, 'me/drives?');
+        return context.sendJson({ drives }, 'out');
+    } catch (err) {
+        if (context.properties.variableFetch) {
+            return context.sendJson({ drives: [] }, 'out');
+        }
+        context.log({ stage: 'Error', err });
+        throw new Error(err);
+    }
+}
+```
+
+**Issue:**
+- No caching
+- No locking
+- Uses `variableFetch` flag for error handling
+
+**Used as Source By:**
+- `src/appmixer/microsoft/onedrive/ListFiles/component.json`
+- `src/appmixer/microsoft/onedrive/MoveFileOrFolder/component.json`
+- `src/appmixer/microsoft/onedrive/CreateFolder/component.json`
+
+**Recommended Enhancement:**
+Add caching with lock for `variableFetch` calls.
+
+#### 24. Google Analytics - ListPropertiesMetadata
+
+**File:** `src/appmixer/google/analytics/ListPropertiesMetadata/ListPropertiesMetadata.js`
+
+**Current Implementation:**
+```javascript
+async receive(context) {
+    try {
+        const { propertyId } = context.properties;
+
+        const { data } = await context.httpRequest({
+            method: 'GET',
+            url: `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}/metadata`,
+            headers: {
+                'Authorization': `Bearer ${context.auth.accessToken}`
+            }
+        });
+
+        return context.sendJson(data, 'out');
+    } catch (error) {
+        if (context.properties.variableFetch) {
+            return context.sendJson({ dimensions: [], metrics: [] }, 'out');
+        }
+        context.log({ stage: 'Error', err });
+        throw new Error('Property ID must be filled');
+    }
+}
+```
+
+**Issue:**
+- No caching
+- No locking
+- Uses `variableFetch` flag for error handling
+
+**Used as Source By:**
+- `src/appmixer/google/analytics/GenerateReport/component.json`
+
+**Recommended Enhancement:**
+Add caching with lock for `variableFetch` calls, using `propertyId` as part of the cache key.
+
 ## Components Already Fixed
 
 These components already have proper locking mechanisms and serve as good reference implementations:
@@ -438,7 +617,9 @@ These components already have proper locking mechanisms and serve as good refere
 1. **Zoho CRM - ListFields**: Has caching without lock - same issue as original PR #818
 
 ### Enhancement Opportunities (Should Consider)
-Components that check `isSource` but don't use caching:
+
+#### Components checking `isSource` without caching (Category 2)
+19 components that check `isSource` but don't use caching:
 - Square - ListCustomerGroups
 - Trello components (5 components)
 - Akamai components (2 components)
@@ -446,6 +627,16 @@ Components that check `isSource` but don't use caching:
 - Kit components (4 components)
 - Klaviyo components (4 components)
 - Pipedrive - ListPeople
+
+#### Components checking `variableFetch` without caching (Category 3)
+5 components that check `variableFetch` but don't use caching:
+- Microsoft OneDrive - ListGroups
+- Microsoft OneDrive - ListSites
+- Microsoft OneDrive - ListUsers
+- Microsoft OneDrive - ListDrives
+- Google Analytics - ListPropertiesMetadata
+
+**Total:** 24 components could benefit from adding caching with proper locking to reduce API calls when used as sources.
 
 These don't have race conditions, but could benefit from caching to reduce API calls when used as sources.
 
@@ -457,15 +648,33 @@ These don't have race conditions, but could benefit from caching to reduce API c
    - Add test similar to the test in PR #818
 
 ### Priority 2: Add Caching for Frequently Used Sources
-Focus on components that are used as sources by many other components:
-1. Trello components (used by multiple other Trello components)
-2. Kit components (used in form builders, sequences, etc.)
-3. Klaviyo components (used in marketing automation flows)
+
+#### High Priority (used by multiple components)
+1. **Microsoft OneDrive components** (Category 3 - using `variableFetch`)
+   - ListDrives (used by 3 components)
+   - ListGroups, ListSites, ListUsers (each used by 2 components)
+   
+2. **Trello components** (Category 2 - using `isSource`)
+   - Used by multiple other Trello components
+
+3. **Kit components** (Category 2 - using `isSource`)
+   - Used in form builders, sequences, etc.
+
+#### Medium Priority
+4. Klaviyo components (used in marketing automation flows)
+5. Google Analytics - ListPropertiesMetadata (used by GenerateReport)
+
+#### Lower Priority
+6. Square, Akamai, HubSpot, Pipedrive components
 
 ### Priority 3: Standardize Pattern
-Create a shared utility or documentation for the standard pattern:
+Create a shared utility or documentation for the standard pattern that works for both `isSource` and `variableFetch`:
+
 ```javascript
-async function withCacheLock(context, cacheKey, lockKey, fetchFn, ttl, isSource) {
+async function withCacheLock(context, cacheKey, lockKey, fetchFn, ttl) {
+    // Check if this is being called as a source
+    const isSource = context.messages?.in?.content?.isSource || context.properties?.variableFetch;
+    
     let lock;
     try {
         lock = await context.lock(lockKey);
