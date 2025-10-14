@@ -79,9 +79,7 @@ module.exports = {
             }
             await context.stateSet('known', Array.from(actual));
         } finally {
-            if (lock) {
-                lock.unlock();
-            }
+            lock?.unlock();
         }
     }
 };

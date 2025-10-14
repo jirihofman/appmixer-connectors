@@ -145,5 +145,40 @@ describe('NewNotification', function() {
             const lockOptions = context.lock.firstCall.args[1];
             assert.strictEqual(lockOptions.ttl, 1000 * 60 * 5); // 5 minutes
         });
+
+        it('should prevent race conditions with concurrent tick calls', async function() {
+            const notifications = [
+                { id: 'notif1', type: 'addedToCard' },
+                { id: 'notif2', type: 'commentCard' }
+            ];
+
+            let lockResolver;
+            const lockPromise = new Promise(resolve => {
+                lockResolver = resolve;
+            });
+
+            // First call gets the lock
+            context.lock = sinon.stub().onFirstCall().returns(lockPromise).onSecondCall().resolves(lockStub);
+
+            context.httpRequest = sinon.stub().resolves({
+                data: notifications
+            });
+
+            // Start first tick (will wait for lock)
+            const firstTick = action.tick(context);
+
+            // Start second tick (should also wait for lock)
+            const secondTick = action.tick(context);
+
+            // Resolve the first lock
+            lockResolver(lockStub);
+
+            await Promise.all([firstTick, secondTick]);
+
+            // Both should have tried to acquire lock
+            assert.strictEqual(context.lock.callCount, 2);
+            // Both should have released the lock
+            assert.strictEqual(lockStub.unlock.callCount, 2);
+        });
     });
 });
