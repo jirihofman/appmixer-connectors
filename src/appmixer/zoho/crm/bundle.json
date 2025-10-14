@@ -1,6 +1,6 @@
 {
     "name": "appmixer.zoho.crm",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "changelog": {
         "1.0.0": [
             "Initial version"
@@ -16,6 +16,9 @@
         ],
         "2.0.3": [
             "Fixed module ID."
+        ],
+        "2.0.4": [
+            "Added locking mechanism to ListFields to prevent race conditions when populating cache."
         ]
     }
 }
