@@ -124,4 +124,71 @@ describe('BaseSubscriptionComponent', () => {
         }
     });
 
+    it('should use cache and avoid lock when webhook URL is already cached', async () => {
+
+        const component = new TestComponent('contact.PropertyChange');
+        context.config.appId = context.auth.profileInfo.app_id || 456;
+        context.config.apiKey = 'testApiKey';
+        context.appmixerApiUrl = 'https://appmixer.example.com';
+        const targetURL = context.appmixerApiUrl + '/plugins/appmixer/hubspot/events';
+
+        // Pre-populate cache with correct target URL
+        const cacheKey = 'hubspot_webhook_' + context.config.appId;
+        context.staticCache.set(cacheKey, targetURL);
+
+        await component.start(context);
+
+        // Should not make HTTP request when cached
+        assert.equal(context.httpRequest.callCount, 0, 'Should not make HTTP request when cached');
+        // Should not acquire lock when cached
+        assert.equal(context.lock.callCount, 0, 'Should not acquire lock when cached');
+        // Should register listener
+        assert.equal(context.addListener.callCount, 1, 'Should register listener');
+    });
+
+    it('should throw when cached webhook URL is incorrect', async () => {
+
+        const component = new TestComponent('contact.PropertyChange');
+        context.config.appId = context.auth.profileInfo.app_id || 456;
+        context.config.apiKey = 'testApiKey';
+        context.appmixerApiUrl = 'https://appmixer.example.com';
+
+        // Pre-populate cache with WRONG target URL
+        const cacheKey = 'hubspot_webhook_' + context.config.appId;
+        context.staticCache.set(cacheKey, 'https://wrong.example.com/hooks');
+
+        try {
+            await component.start(context);
+            throw new Error('Expected start() to throw CancelError due to wrong cached URL');
+        } catch (err) {
+            assert.equal(err.name, 'CancelError');
+            assert.ok(err.message.indexOf('wrong target URL') !== -1);
+            // Should not make HTTP request or acquire lock
+            assert.equal(context.httpRequest.callCount, 0, 'Should not make HTTP request when cached');
+            assert.equal(context.lock.callCount, 0, 'Should not acquire lock when cached');
+        }
+    });
+
+    it('should double-check cache after acquiring lock', async () => {
+
+        const component = new TestComponent('contact.PropertyChange');
+        context.config.appId = context.auth.profileInfo.app_id || 456;
+        context.config.apiKey = 'testApiKey';
+        context.appmixerApiUrl = 'https://appmixer.example.com';
+        const targetURL = context.appmixerApiUrl + '/plugins/appmixer/hubspot/events';
+
+        // Simulate cache being populated between initial check and lock acquisition
+        context.staticCache.get.onFirstCall().returns(null); // Initial check: no cache
+        context.staticCache.get.onSecondCall().returns(targetURL); // After lock: cache populated
+
+        await component.start(context);
+
+        // Should acquire lock (cache was empty initially)
+        assert.equal(context.lock.callCount, 1, 'Should acquire lock when cache was empty');
+        // Should not make HTTP request (cache populated by concurrent request)
+        assert.equal(context.httpRequest.callCount, 0, 'Should not make HTTP request when cache populated by concurrent request');
+        // Should register listener
+        assert.equal(context.addListener.callCount, 1, 'Should register listener');
+    });
+
 });

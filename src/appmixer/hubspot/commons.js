@@ -46,12 +46,23 @@ module.exports = {
         // Use hub_id from context to differentiate between different HubSpot portals/users.
         const portalId = context.auth?.profileInfo?.hub_id || 'default';
         const cacheKeyPrefix = 'hubspot_properties_' + objectType + '_' + portalId;
+        const cacheKey = cacheKeyPrefix + '_' + output;
+
+        // Check cache before acquiring lock to avoid unnecessary lock acquisitions
+        const cached = await context.staticCache.get(cacheKey);
+        if (cached) {
+            return cached;
+        }
+
         let lock;
         try {
-            lock = await context.lock(`hubspot_properties_${objectType}`);
-            const cached = await context.staticCache.get(cacheKeyPrefix + '_' + output);
-            if (cached) {
-                return cached;
+            // Lock key must include portalId to prevent race conditions between different portals
+            lock = await context.lock(cacheKeyPrefix);
+
+            // Double-check cache after acquiring lock in case another request populated it
+            const cachedAfterLock = await context.staticCache.get(cacheKey);
+            if (cachedAfterLock) {
+                return cachedAfterLock;
             }
 
             // Get all properties from HubSpot.

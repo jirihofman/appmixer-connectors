@@ -1,6 +1,6 @@
 {
     "name": "appmixer.hubspot",
-    "version": "4.2.2",
+    "version": "4.2.3",
     "engine": ">=6.0.0",
     "changelog": {
         "1.0.0": [
@@ -69,6 +69,11 @@
         ],
         "4.2.2": [
             "Fixed an issue with triggers not working when using AuthHub. Added additional check of webhook configuration."
+        ],
+        "4.2.3": [
+            "Improved locking and caching mechanisms to prevent race conditions and reduce API calls.",
+            "Fixed lock key in getObjectProperties to include portalId, preventing concurrent requests from different HubSpot portals from interfering with each other.",
+            "Optimized cache checking in ensureWebhook to check cache before acquiring lock, reducing unnecessary lock acquisitions."
         ]
     }
 }
