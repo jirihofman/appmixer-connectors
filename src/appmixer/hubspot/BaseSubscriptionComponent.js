@@ -42,14 +42,29 @@ class BaseSubscriptionComponent {
 
         // Use cache to avoid hitting HubSpot API too often
         const cacheKey = 'hubspot_webhook_' + appId;
+
+        // Check cache before acquiring lock to avoid unnecessary lock acquisitions
+        const targetURLCached = await context.staticCache.get(cacheKey);
+        if (targetURLCached) {
+            existingTargetURL = targetURLCached;
+            if (existingTargetURL) {
+                webhookConfiguredProperly = existingTargetURL === targetURL;
+            }
+            if (!webhookConfiguredProperly) {
+                throw new context.CancelError(`HubSpot webhook not configured properly, wrong target URL. Expected: ${targetURL}, existing: ${existingTargetURL}`);
+            }
+            return;
+        }
+
         let lock;
         try {
             // Only one trigger at a time
             lock = await context.lock(cacheKey);
 
-            const targetURLCached = await context.staticCache.get(cacheKey);
-            if (targetURLCached) {
-                existingTargetURL = targetURLCached;
+            // Double-check cache after acquiring lock in case another request populated it
+            const targetURLCachedAfterLock = await context.staticCache.get(cacheKey);
+            if (targetURLCachedAfterLock) {
+                existingTargetURL = targetURLCachedAfterLock;
             } else {
                 // Check webhooks/v3/${appId}/settings
                 const { data } = await context.httpRequest({
