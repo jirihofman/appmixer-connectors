@@ -51,24 +51,38 @@ module.exports = {
 
     async tick(context) {
 
-        let { boardId, boardListId, boardListCardId } = context.properties;
+        let lock;
+        try {
+            lock = await context.lock(context.componentId, {
+                ttl: parseInt(context.config.lockTTL, 10) || 1000 * 60 * 5,
+                maxRetryCount: 0
+            });
 
-        let { data: res } = await context.httpRequest({
-            headers: { 'Content-Type': 'application/json' },
-            url: `https://api.trello.com${buildUrl(boardId, boardListId, boardListCardId)}?${commons.getAuthQueryParams(context)}`
-        });
-        let known = Array.isArray(context.state.known) ? new Set(context.state.known) : null;
-        let actual = new Set();
-        let diff = new Set();
+            let { boardId, boardListId, boardListCardId } = context.properties;
 
-        res.forEach(processActivities.bind(null, known, actual, diff));
+            let { data: res } = await context.httpRequest({
+                headers: { 'Content-Type': 'application/json' },
+                url: `https://api.trello.com${buildUrl(boardId, boardListId, boardListCardId)}?${commons.getAuthQueryParams(context)}`
+            });
 
-        if (diff.size) {
-            await Promise.all(Array.from(diff).map(activity => {
-                return context.sendJson(activity, 'activity');
-            }));
+            const knownActivities = await context.stateGet('known') || [];
+            let known = new Set(knownActivities);
+            let actual = new Set();
+            let diff = new Set();
+
+            res.forEach(processActivities.bind(null, known, actual, diff));
+
+            if (diff.size) {
+                await Promise.all(Array.from(diff).map(activity => {
+                    return context.sendJson(activity, 'activity');
+                }));
+            }
+            await context.stateSet('known', Array.from(actual));
+        } finally {
+            if (lock) {
+                lock.unlock();
+            }
         }
-        await context.saveState({ known: Array.from(actual) });
     }
 };
 

@@ -25,31 +25,45 @@ module.exports = {
 
     async tick(context) {
 
-        let { boardId, boardListId } = context.properties;
+        let lock;
+        try {
+            lock = await context.lock(context.componentId, {
+                ttl: parseInt(context.config.lockTTL, 10) || 1000 * 60 * 5,
+                maxRetryCount: 0
+            });
 
-        let url;
-        if (boardListId) {
-            url = '/1/lists/' + boardListId + '/cards';
-        } else {
-            url = '/1/boards/' + boardId + '/cards';
+            let { boardId, boardListId } = context.properties;
+
+            let url;
+            if (boardListId) {
+                url = '/1/lists/' + boardListId + '/cards';
+            } else {
+                url = '/1/boards/' + boardId + '/cards';
+            }
+
+            const { data: res } = await context.httpRequest({
+                headers: { 'Content-Type': 'application/json' },
+                url: `https://api.trello.com${url}?${commons.getAuthQueryParams(context)}`
+            });
+
+            const knownCards = await context.stateGet('known') || [];
+            let known = new Set(knownCards);
+            let actual = new Set();
+            let diff = new Set();
+
+            res.forEach(processCards.bind(null, known, actual, diff));
+
+            if (diff.size) {
+                await Promise.all(Array.from(diff).map(card => {
+                    return context.sendJson(card, 'card');
+                }));
+            }
+            await context.stateSet('known', Array.from(actual));
+        } finally {
+            if (lock) {
+                lock.unlock();
+            }
         }
-
-        const { data: res } = await context.httpRequest({
-            headers: { 'Content-Type': 'application/json' },
-            url: `https://api.trello.com${url}?${commons.getAuthQueryParams(context)}`
-        });
-        let known = Array.isArray(context.state.known) ? new Set(context.state.known) : null;
-        let actual = new Set();
-        let diff = new Set();
-
-        res.forEach(processCards.bind(null, known, actual, diff));
-
-        if (diff.size) {
-            await Promise.all(Array.from(diff).map(card => {
-                return context.sendJson(card, 'card');
-            }));
-        }
-        await context.saveState({ known: Array.from(actual) });
     }
 };
 

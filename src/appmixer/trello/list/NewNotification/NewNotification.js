@@ -24,22 +24,35 @@ module.exports = {
 
     async tick(context) {
 
-        const { data: res } = await context.httpRequest({
-            headers: { 'Content-Type': 'application/json' },
-            url: `https://api.trello.com/1/members/me/notifications?${commons.getAuthQueryParams(context)}`
-        });
+        let lock;
+        try {
+            lock = await context.lock(context.componentId, {
+                ttl: parseInt(context.config.lockTTL, 10) || 1000 * 60 * 5,
+                maxRetryCount: 0
+            });
 
-        let known = Array.isArray(context.state.known) ? new Set(context.state.known) : null;
-        let actual = new Set();
-        let diff = new Set();
+            const { data: res } = await context.httpRequest({
+                headers: { 'Content-Type': 'application/json' },
+                url: `https://api.trello.com/1/members/me/notifications?${commons.getAuthQueryParams(context)}`
+            });
 
-        res.forEach(processNotifications.bind(null, known, actual, diff));
+            const knownNotifications = await context.stateGet('known') || [];
+            let known = new Set(knownNotifications);
+            let actual = new Set();
+            let diff = new Set();
 
-        if (diff.size) {
-            await Promise.all(Array.from(diff).map(notification => {
-                return context.sendJson(notification, 'notification');
-            }));
+            res.forEach(processNotifications.bind(null, known, actual, diff));
+
+            if (diff.size) {
+                await Promise.all(Array.from(diff).map(notification => {
+                    return context.sendJson(notification, 'notification');
+                }));
+            }
+            await context.stateSet('known', Array.from(actual));
+        } finally {
+            if (lock) {
+                lock.unlock();
+            }
         }
-        await context.saveState({ known: Array.from(actual) });
     }
 };
