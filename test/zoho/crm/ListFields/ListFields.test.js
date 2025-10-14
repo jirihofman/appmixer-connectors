@@ -44,9 +44,11 @@ describe('Zoho CRM ListFields', function() {
         });
 
         afterEach(function() {
-            // Restore the stub
+            // Restore the stub if it exists
             const ZohoClient = require('../../../../src/appmixer/zoho/ZohoClient');
-            ZohoClient.prototype.getFields.restore();
+            if (ZohoClient.prototype.getFields.restore) {
+                ZohoClient.prototype.getFields.restore();
+            }
         });
 
         it('should fetch fields and cache them with proper locking', async function() {
@@ -225,6 +227,83 @@ describe('Zoho CRM ListFields', function() {
             assert.equal(context.lock.callCount, 2);
             assert.equal(context.lock.firstCall.args[0], 'zoho_crm_fields_Contacts');
             assert.equal(context.lock.secondCall.args[0], 'zoho_crm_fields_Leads');
+        });
+
+        it('calls receive 20 times in parallel with same module and delayed staticCache.get, getFields should be called once', async function() {
+            // Simulate a race condition scenario where 20 parallel calls are made
+            // with the same moduleName. The locking mechanism should ensure only
+            // one call to ZohoClient.getFields is made.
+
+            const moduleName = 'Contacts';
+            let cacheSetValue = null;
+
+            // Create a slow staticCache that simulates DB latency
+            const slowStaticCache = {
+                get: sinon.stub().callsFake(async (key) => {
+                    // simulate a slow DB call taking between 20 and 50 ms
+                    const delay = 20 + Math.floor(Math.random() * 30);
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                    return cacheSetValue; // initially null -> triggers fetch
+                }),
+                set: sinon.stub().callsFake(async (key, value, ttl) => {
+                    // setting the cache also takes some time
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    cacheSetValue = value;
+                    return true;
+                })
+            };
+
+            // Create a mock HTTP client that simulates the Zoho API
+            let apiCallCount = 0;
+            const mockHttpClient = sinon.stub().callsFake(async (request) => {
+                apiCallCount++;
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 10));
+                return { data: { fields: fixtureFieldsData } };
+            });
+
+            // Create base context with real mutex lock
+            const baseContext = testUtils.createMockContext({
+                profileInfo: {
+                    region: 'com',
+                    fullname: 'Test User'
+                },
+                auth: {
+                    accessToken: 'test-access-token'
+                },
+                staticCache: slowStaticCache,
+                config: {},
+                sendJson: sinon.stub().resolves(),
+                // opt into real mutex behaviour for this concurrency test
+                lock: testUtils.createMutexLock()
+            });
+
+            // Mock httpRequest.create to return our mock HTTP client
+            baseContext.httpRequest.create = sinon.stub().returns(mockHttpClient);
+
+            // Create 20 parallel calls using shallow clones of context
+            const calls = Array.from({ length: 20 }, () => {
+                // shallow copy to simulate distinct context objects but same staticCache
+                const ctx = Object.assign({}, baseContext);
+                ctx.messages = {
+                    in: {
+                        content: {
+                            moduleName: moduleName
+                        }
+                    }
+                };
+                return ctx;
+            });
+
+            // Kick off 20 parallel receive invocations
+            const promises = calls.map(ctx => action.receive(ctx));
+
+            // Wait for all to finish
+            await Promise.all(promises);
+
+            assert.strictEqual(apiCallCount, 1, 'Zoho API should be called only once (via getFields)');
+            assert.strictEqual(slowStaticCache.set.callCount, 1, 'staticCache.set should be called to populate cache');
+            assert.strictEqual(slowStaticCache.get.callCount, 20, 'staticCache.get should be called for each receive call');
         });
     });
 });
