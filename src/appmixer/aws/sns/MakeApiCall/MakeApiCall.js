@@ -34,7 +34,7 @@ module.exports = {
         // Create an endpoint and signer for manual API calls
         const endpoint = new AWS.Endpoint(url);
         const request = new AWS.HttpRequest(endpoint, region);
-        
+
         request.method = method;
         request.headers['Host'] = endpoint.host;
         request.headers['Content-Type'] = 'application/x-www-form-urlencoded';
