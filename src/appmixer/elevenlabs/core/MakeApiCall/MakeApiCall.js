@@ -18,7 +18,11 @@ module.exports = {
         };
 
         if (body) {
-            requestOptions.data = JSON.parse(body);
+            try {
+                requestOptions.data = JSON.parse(body);
+            } catch (parseError) {
+                throw new Error(`Invalid JSON in request body: ${parseError.message}`);
+            }
         }
 
         try {

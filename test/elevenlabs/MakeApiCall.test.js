@@ -97,9 +97,9 @@ describe('MakeApiCall Component', function() {
             assert(data.status, 'Expected response to have status code');
             assert(data.body, 'Expected response to have body');
 
-            // Verify we got models array
-            if (Array.isArray(data.body)) {
-                assert(Array.isArray(data.body), 'Expected models to be an array');
+            // Verify we got models array if the body is an array
+            if (data.body && Array.isArray(data.body)) {
+                console.log(`Received ${data.body.length} models`);
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
@@ -232,6 +232,22 @@ describe('MakeApiCall Component', function() {
                 console.log(`${method} method failed with:`, error.message);
                 // Don't fail the test for method-specific errors
             }
+        }
+    });
+
+    it('should handle invalid JSON in request body', async function() {
+        context.messages.in.content = {
+            url: 'https://api.elevenlabs.io/v1/user',
+            method: 'POST',
+            body: '{ invalid json }'
+        };
+
+        try {
+            await MakeApiCall.receive(context);
+            assert.fail('Expected an error for invalid JSON');
+        } catch (error) {
+            assert(error.message.includes('Invalid JSON'), 'Expected error message about invalid JSON');
+            console.log('Invalid JSON error handled correctly:', error.message);
         }
     });
 });
