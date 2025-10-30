@@ -13,13 +13,17 @@ module.exports = {
             method: method,
             url: requestUrl,
             headers: {
-                'Authorization': `Bearer ${context.auth.apiKey}`,
-                'Content-Type': 'application/json'
+                'Authorization': `Bearer ${context.auth.apiKey}`
             }
         };
 
         if (body) {
-            requestOptions.data = JSON.parse(body);
+            try {
+                requestOptions.data = JSON.parse(body);
+                requestOptions.headers['Content-Type'] = 'application/json';
+            } catch (parseError) {
+                throw new Error(`Invalid JSON in request body: ${parseError.message}`);
+            }
         }
 
         try {
