@@ -11,6 +11,16 @@ module.exports = {
         const { url, method, body } = context.messages.in.content;
         const { hostnameUrl, accessToken, clientSecret, clientToken } = context.auth;
 
+        // Parse body once if provided
+        let parsedBody;
+        if (body) {
+            try {
+                parsedBody = JSON.parse(body);
+            } catch (error) {
+                throw new Error(`Invalid JSON in request body: ${error.message}`);
+            }
+        }
+
         // Extract path from URL
         // URL can be either a full URL (https://...) or just a path (/client-list/v1/...)
         let path;
@@ -31,7 +41,7 @@ module.exports = {
             clientSecret,
             method: method,
             path: path,
-            body: body ? JSON.parse(body) : undefined
+            body: parsedBody
         });
 
         const requestOptions = {
@@ -43,8 +53,8 @@ module.exports = {
             }
         };
 
-        if (body) {
-            requestOptions.data = JSON.parse(body);
+        if (parsedBody) {
+            requestOptions.data = parsedBody;
         }
 
         try {
