@@ -52,6 +52,9 @@
                     },
                     "body": {
                         "type": "string"
+                    },
+                    "contentType": {
+                        "type": "string"
                     }
                 },
                 "required": ["url", "method"]
@@ -83,6 +86,12 @@
                         "index": 3,
                         "label": "Request Body",
                         "tooltip": "Enter the request body for the API call. For AWS SNS, this typically includes Action and other parameters in URL-encoded format or JSON."
+                    },
+                    "contentType": {
+                        "type": "text",
+                        "index": 4,
+                        "label": "Content-Type (Optional)",
+                        "tooltip": "Custom Content-Type header. Defaults to 'application/x-www-form-urlencoded' if not specified."
                     }
                 }
             }

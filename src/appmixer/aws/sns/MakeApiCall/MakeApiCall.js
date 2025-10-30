@@ -1,5 +1,6 @@
 'use strict';
 const AWS = require('aws-sdk');
+const commons = require('../../aws-commons');
 
 /**
  * Component for making a generic API Call to AWS SNS
@@ -7,7 +8,7 @@ const AWS = require('aws-sdk');
  */
 module.exports = {
     async receive(context) {
-        const { url, method, body } = context.messages.in.content;
+        const { url, method, body, contentType } = context.messages.in.content;
         const region = context.properties.region;
 
         if (!url) {
@@ -22,11 +23,8 @@ module.exports = {
             throw new context.CancelError('Region is required');
         }
 
-        // Configure AWS SDK
-        AWS.config.update({
-            signatureVersion: 'v4',
-            region: region
-        });
+        // Initialize AWS SDK using common configuration
+        commons.init(context);
 
         const { accessKeyId, secretKey } = context.auth;
         const credentials = new AWS.Credentials(accessKeyId, secretKey);
@@ -37,7 +35,8 @@ module.exports = {
 
         request.method = method;
         request.headers['Host'] = endpoint.host;
-        request.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+        // Allow custom Content-Type, default to application/x-www-form-urlencoded for AWS SNS
+        request.headers['Content-Type'] = contentType || 'application/x-www-form-urlencoded';
 
         if (body) {
             request.body = body;
@@ -66,6 +65,7 @@ module.exports = {
             }, 'out');
         } catch (error) {
             const axiosError = error.response?.data;
+            // AWS API responses may use 'message' (lowercase) or 'Message' (uppercase) in error responses
             error.message = `${error.message}: ${axiosError?.message || axiosError?.Message || ''}`;
             throw error;
         }
