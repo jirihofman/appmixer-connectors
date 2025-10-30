@@ -1,7 +1,10 @@
 {
     "name": "appmixer.elevenlabs",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "changelog": {
+        "1.0.2": [
+            "Added MakeApiCall component for arbitrary authenticated API calls."
+        ],
         "1.0.1": [
             "Initial version"
         ]
