@@ -26,6 +26,7 @@ module.exports = {
         // Initialize AWS SDK using common configuration
         commons.init(context);
 
+        // Get credentials for request signing
         const { accessKeyId, secretKey } = context.auth;
         const credentials = new AWS.Credentials(accessKeyId, secretKey);
 
