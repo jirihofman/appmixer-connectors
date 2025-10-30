@@ -31,7 +31,7 @@ module.exports = {
 
         try {
             const response = await context.httpRequest(requestOptions);
-            
+
             return context.sendJson({
                 status: response.status,
                 headers: response.headers,
