@@ -1,9 +1,12 @@
 {
     "name": "appmixer.vercel",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "changelog": {
         "1.0.1": [
             "Initial version"
+        ],
+        "1.0.2": [
+            "Added MakeApiCall component for making arbitrary authenticated API calls to Vercel API."
         ]
     }
 }
