@@ -22,7 +22,11 @@ module.exports = {
         };
 
         if (body) {
-            requestOptions.data = JSON.parse(body);
+            try {
+                requestOptions.data = JSON.parse(body);
+            } catch (parseError) {
+                throw new context.CancelError(`Invalid JSON in request body: ${parseError.message}`);
+            }
         }
 
         try {
@@ -34,9 +38,13 @@ module.exports = {
                 body: response.data
             }, 'out');
         } catch (error) {
-            const axiosError = error.response?.data;
-            error.message = `${error.message}: ${axiosError?.message || ''}`;
-            throw error;
+            // Handle HTTP error responses
+            if (error.response) {
+                const errorMessage = error.response.data?.message || error.message;
+                throw new Error(`API request failed with status ${error.response.status}: ${errorMessage}`);
+            }
+            // Handle network or other errors
+            throw new Error(`API request failed: ${error.message}`);
         }
     }
 };
