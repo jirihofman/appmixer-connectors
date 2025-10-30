@@ -1,7 +1,10 @@
 {
     "name": "appmixer.resend",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "changelog": {
+        "1.0.3": [
+            "Added MakeApiCall component for making arbitrary authenticated API calls to Resend API."
+        ],
         "1.0.2": [
             "Initial version"
         ]
