@@ -36,7 +36,9 @@ module.exports = {
             }, 'out');
         } catch (error) {
             const axiosError = error.response?.data;
-            error.message = `${error.message}: ${axiosError?.message || ''}`;
+            if (axiosError?.message) {
+                error.message = `${error.message}: ${axiosError.message}`;
+            }
             throw error;
         }
     }
