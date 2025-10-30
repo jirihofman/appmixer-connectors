@@ -23,13 +23,18 @@ module.exports = {
             method: method,
             url: requestUrl,
             headers: {
-                'Api-Token': context.auth.apiKey,
-                'Content-Type': 'application/json'
+                'Api-Token': context.auth.apiKey
             }
         };
 
+        // Add Content-Type header only for requests with a body
         if (body) {
-            requestOptions.data = JSON.parse(body);
+            requestOptions.headers['Content-Type'] = 'application/json';
+            try {
+                requestOptions.data = JSON.parse(body);
+            } catch (parseError) {
+                throw new Error(`Invalid JSON in request body: ${parseError.message}`);
+            }
         }
 
         try {
@@ -44,8 +49,13 @@ module.exports = {
             // Extract meaningful error from ActiveCampaign API response
             const acError = error.response?.data;
             if (acError?.errors) {
-                const errors = acError.errors.map(err => err.title).join(', ');
-                error.message = `${error.message}: ${errors}`;
+                const errors = acError.errors
+                    .map(err => err.title || err.detail || 'Unknown error')
+                    .filter(msg => msg)
+                    .join(', ');
+                if (errors) {
+                    error.message = `${error.message}: ${errors}`;
+                }
             } else if (acError?.message) {
                 error.message = `${error.message}: ${acError.message}`;
             }
