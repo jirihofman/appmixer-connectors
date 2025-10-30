@@ -17,7 +17,11 @@ module.exports = {
         };
 
         if (body) {
-            requestOptions.data = JSON.parse(body);
+            try {
+                requestOptions.data = JSON.parse(body);
+            } catch (error) {
+                throw new Error(`Invalid JSON in request body: ${error.message}`);
+            }
         }
 
         const response = await context.httpRequest(requestOptions);

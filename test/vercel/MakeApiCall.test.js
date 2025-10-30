@@ -331,4 +331,31 @@ describe('MakeApiCall', () => {
 
         await component.receive(context);
     });
+
+    it('should throw error for invalid JSON in body', async () => {
+        const testUrl = 'https://api.vercel.com/v9/projects';
+        const invalidJson = '{ invalid json here }';
+
+        const context = {
+            messages: {
+                in: {
+                    content: {
+                        url: testUrl,
+                        method: 'POST',
+                        body: invalidJson
+                    }
+                }
+            },
+            auth: {
+                apiToken: 'mock_token'
+            }
+        };
+
+        try {
+            await component.receive(context);
+            assert.fail('Expected error for invalid JSON');
+        } catch (error) {
+            assert(error.message.includes('Invalid JSON in request body'));
+        }
+    });
 });
