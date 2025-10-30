@@ -4,7 +4,7 @@ module.exports = {
 
     async receive(context) {
 
-        const { resource, method = 'GET', body, queryParams, headers } = context.messages?.in?.content || {};
+        const { resource, method, body, queryParams, headers } = context.messages?.in?.content || {};
 
         if (!resource) {
             throw new context.CancelError('Resource is required');
@@ -16,7 +16,7 @@ module.exports = {
 
         // Prepare request configuration
         const requestConfig = {
-            method: method?.toUpperCase() || 'GET',
+            method: method.toUpperCase(),
             url: `${context.auth.endpoint}/${resource}`,
             headers: {
                 'Ocp-Apim-Subscription-Key': context.auth.apiKey
@@ -43,7 +43,7 @@ module.exports = {
         }
 
         // Add body for POST/PUT/PATCH requests
-        if (['POST', 'PUT', 'PATCH'].includes(method?.toUpperCase() || 'GET') && body) {
+        if (['POST', 'PUT', 'PATCH'].includes(method.toUpperCase()) && body) {
             try {
                 if (typeof body === 'string') {
                     requestConfig.data = JSON.parse(body);
