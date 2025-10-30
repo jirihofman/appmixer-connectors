@@ -1,0 +1,80 @@
+{
+    "name": "appmixer.blackboard.lms.MakeApiCall",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Performs an arbitrary authorized API call to Blackboard Learn API.",
+    "private": false,
+    "auth": {
+        "service": "appmixer:blackboard",
+        "scope": []
+    },
+    "quota": {
+        "manager": "appmixer:blackboard",
+        "resources": "requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "method": {
+                        "type": "string",
+                        "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+                        "default": "GET"
+                    },
+                    "body": {
+                        "type": "string"
+                    }
+                },
+                "required": ["url", "method"]
+            },
+            "inspector": {
+                "inputs": {
+                    "url": {
+                        "type": "text",
+                        "index": 1,
+                        "label": "API Endpoint URL",
+                        "tooltip": "Enter the API endpoint path. For example: /v3/courses or /v1/users/me. The base URL (server URL) is automatically prepended."
+                    },
+                    "method": {
+                        "type": "select",
+                        "index": 2,
+                        "label": "HTTP Method",
+                        "defaultValue": "GET",
+                        "tooltip": "Select the HTTP method for the API call.",
+                        "options": [
+                            { "label": "GET", "value": "GET" },
+                            { "label": "POST", "value": "POST" },
+                            { "label": "PUT", "value": "PUT" },
+                            { "label": "PATCH", "value": "PATCH" },
+                            { "label": "DELETE", "value": "DELETE" }
+                        ]
+                    },
+                    "body": {
+                        "type": "textarea",
+                        "index": 3,
+                        "label": "Request Body",
+                        "tooltip": "Enter the request body for the API call (JSON format)."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "Status Code", "value": "status" },
+                { "label": "Response Headers", "value": "headers" },
+                { "label": "Response Body", "value": "body", "schema": { "type": "object", "properties": {} } }
+            ]
+        }
+    ],
+    "icon": "data:image/png;base64,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"
+}
