@@ -27,7 +27,11 @@ module.exports = {
         };
 
         if (body) {
-            requestOptions.data = JSON.parse(body);
+            try {
+                requestOptions.data = JSON.parse(body);
+            } catch (parseError) {
+                throw new Error(`Invalid JSON in request body: ${parseError.message}`);
+            }
         }
 
         try {
@@ -40,7 +44,16 @@ module.exports = {
             }, 'out');
         } catch (error) {
             const axiosError = error.response?.data;
-            error.message = `${error.message}: ${axiosError?.errors?.[0]?.message || axiosError?.message || ''}`;
+            // Extract error message from Asana's error structure
+            let errorMessage = '';
+            if (axiosError?.errors && Array.isArray(axiosError.errors) && axiosError.errors.length > 0) {
+                errorMessage = axiosError.errors[0].message;
+            } else if (axiosError?.message) {
+                errorMessage = axiosError.message;
+            }
+            if (errorMessage) {
+                error.message = `${error.message}: ${errorMessage}`;
+            }
             throw error;
         }
     }
