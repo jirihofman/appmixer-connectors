@@ -1,0 +1,53 @@
+{
+    "name": "appmixer.newrelic.core.GetUser",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Get details of a specific user by their ID.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:newrelic"
+    },
+    "quota": {
+        "manager": "appmixer:newrelic",
+        "resources": "api.requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "userId": {
+                        "type": "integer"
+                    }
+                },
+                "required": ["userId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "userId": {
+                        "type": "number",
+                        "label": "User ID",
+                        "index": 1,
+                        "tooltip": "The unique identifier of the user"
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "User ID", "value": "id" },
+                { "label": "First Name", "value": "first_name" },
+                { "label": "Last Name", "value": "last_name" },
+                { "label": "Email", "value": "email" },
+                { "label": "Role", "value": "role" }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDY0IDY0Ij48cGF0aCBmaWxsPSIjMDBBQzhFIiBkPSJNMzIgMEMxNC4zIDAgMCAxNC4zIDAgMzJzMTQuMyAzMiAzMiAzMiAzMi0xNC4zIDMyLTMyUzQ5LjcgMCAzMiAwem0wIDU4LjdDMTcuMSA1OC43IDUuMyA0Ni45IDUuMyAzMlMxNy4xIDUuMyAzMiA1LjMgNTguNyAxNy4xIDU4LjcgMzIgNDYuOSA1OC43IDMyIDU4Ljd6Ii8+PHBhdGggZmlsbD0iIzAwQUM4RSIgZD0iTTMyIDE2LjJjLTguNyAwLTE1LjggNy4xLTE1LjggMTUuOHM3LjEgMTUuOCAxNS44IDE1LjggMTUuOC03LjEgMTUuOC0xNS44UzQwLjcgMTYuMiAzMiAxNi4yem0wIDI2LjNjLTUuOCAwLTEwLjUtNC43LTEwLjUtMTAuNXM0LjctMTAuNSAxMC41LTEwLjUgMTAuNSA0LjcgMTAuNSAxMC41UzM3LjggNDIuNSAzMiA0Mi41eiIvPjwvc3ZnPg=="
+}

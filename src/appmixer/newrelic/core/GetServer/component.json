@@ -1,0 +1,55 @@
+{
+    "name": "appmixer.newrelic.core.GetServer",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Get details of a specific server by its ID.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:newrelic"
+    },
+    "quota": {
+        "manager": "appmixer:newrelic",
+        "resources": "api.requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "serverId": {
+                        "type": "integer"
+                    }
+                },
+                "required": ["serverId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "serverId": {
+                        "type": "number",
+                        "label": "Server ID",
+                        "index": 1,
+                        "tooltip": "The unique identifier of the server"
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "Server ID", "value": "id" },
+                { "label": "Name", "value": "name" },
+                { "label": "Host", "value": "host" },
+                { "label": "Health Status", "value": "health_status" },
+                { "label": "Reporting", "value": "reporting" },
+                { "label": "Last Reported At", "value": "last_reported_at" },
+                { "label": "Summary", "value": "summary" }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDY0IDY0Ij48cGF0aCBmaWxsPSIjMDBBQzhFIiBkPSJNMzIgMEMxNC4zIDAgMCAxNC4zIDAgMzJzMTQuMyAzMiAzMiAzMiAzMi0xNC4zIDMyLTMyUzQ5LjcgMCAzMiAwem0wIDU4LjdDMTcuMSA1OC43IDUuMyA0Ni45IDUuMyAzMlMxNy4xIDUuMyAzMiA1LjMgNTguNyAxNy4xIDU4LjcgMzIgNDYuOSA1OC43IDMyIDU4Ljd6Ii8+PHBhdGggZmlsbD0iIzAwQUM4RSIgZD0iTTMyIDE2LjJjLTguNyAwLTE1LjggNy4xLTE1LjggMTUuOHM3LjEgMTUuOCAxNS44IDE1LjggMTUuOC03LjEgMTUuOC0xNS44UzQwLjcgMTYuMiAzMiAxNi4yem0wIDI2LjNjLTUuOCAwLTEwLjUtNC43LTEwLjUtMTAuNXM0LjctMTAuNSAxMC41LTEwLjUgMTAuNSA0LjcgMTAuNSAxMC41UzM3LjggNDIuNSAzMiA0Mi41eiIvPjwvc3ZnPg=="
+}

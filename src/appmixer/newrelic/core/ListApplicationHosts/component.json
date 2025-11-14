@@ -1,0 +1,73 @@
+{
+    "name": "appmixer.newrelic.core.ListApplicationHosts",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "List all hosts associated with a specific application. Returns up to 200 hosts.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:newrelic"
+    },
+    "quota": {
+        "manager": "appmixer:newrelic",
+        "resources": "api.requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "applicationId": {
+                        "type": "integer"
+                    },
+                    "outputType": {
+                        "type": "string"
+                    }
+                },
+                "required": ["applicationId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "applicationId": {
+                        "type": "number",
+                        "label": "Application ID",
+                        "index": 1,
+                        "tooltip": "The unique identifier of the application"
+                    },
+                    "outputType": {
+                        "type": "select",
+                        "label": "Output Type",
+                        "index": 2,
+                        "defaultValue": "array",
+                        "tooltip": "Choose whether you want to receive the result set as one complete list, or first item only or one item at a time or stream the items to a file.",
+                        "options": [
+                            { "label": "First Item Only", "value": "first" },
+                            { "label": "All items at once", "value": "array" },
+                            { "label": "One item at a time", "value": "object" },
+                            { "label": "Store to CSV file", "value": "file" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "source": {
+                "url": "/component/appmixer/newrelic/core/ListApplicationHosts?outPort=out",
+                "data": {
+                    "properties": {
+                        "generateOutputPortOptions": true
+                    },
+                    "messages": {
+                        "in/outputType": "inputs/in/outputType"
+                    }
+                }
+            }
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDY0IDY0Ij48cGF0aCBmaWxsPSIjMDBBQzhFIiBkPSJNMzIgMEMxNC4zIDAgMCAxNC4zIDAgMzJzMTQuMyAzMiAzMiAzMiAzMi0xNC4zIDMyLTMyUzQ5LjcgMCAzMiAwem0wIDU4LjdDMTcuMSA1OC43IDUuMyA0Ni45IDUuMyAzMlMxNy4xIDUuMyAzMiA1LjMgNTguNyAxNy4xIDU4LjcgMzIgNDYuOSA1OC43IDMyIDU4Ljd6Ii8+PHBhdGggZmlsbD0iIzAwQUM4RSIgZD0iTTMyIDE2LjJjLTguNyAwLTE1LjggNy4xLTE1LjggMTUuOHM3LjEgMTUuOCAxNS44IDE1LjggMTUuOC03LjEgMTUuOC0xNS44UzQwLjcgMTYuMiAzMiAxNi4yem0wIDI2LjNjLTUuOCAwLTEwLjUtNC43LTEwLjUtMTAuNXM0LjctMTAuNSAxMC41LTEwLjUgMTAuNSA0LjcgMTAuNSAxMC41UzM3LjggNDIuNSAzMiA0Mi41eiIvPjwvc3ZnPg=="
+}

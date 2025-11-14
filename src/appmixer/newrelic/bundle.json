@@ -1,0 +1,9 @@
+{
+    "name": "appmixer.newrelic",
+    "version": "1.0.0",
+    "changelog": {
+        "1.0.0": [
+            "Initial release with support for Applications, Servers, Alerts, Deployments, and Users."
+        ]
+    }
+}
