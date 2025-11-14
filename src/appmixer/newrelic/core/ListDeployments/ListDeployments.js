@@ -25,9 +25,10 @@ module.exports = {
             throw new context.CancelError('Application ID is required!');
         }
 
+        const host = lib.getApiHost(context);
         const { data } = await context.httpRequest({
             method: 'GET',
-            url: `https://api.newrelic.com/v2/applications/${applicationId}/deployments.json`,
+            url: `${host}/v2/applications/${applicationId}/deployments.json`,
             headers: {
                 'X-Api-Key': context.auth.apiKey
             }

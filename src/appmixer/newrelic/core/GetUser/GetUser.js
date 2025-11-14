@@ -10,9 +10,11 @@ module.exports = {
             throw new context.CancelError('User ID is required!');
         }
 
+        const lib = require('../../lib');
+        const host = lib.getApiHost(context);
         const { data } = await context.httpRequest({
             method: 'GET',
-            url: `https://api.newrelic.com/v2/users/${userId}.json`,
+            url: `${host}/v2/users/${userId}.json`,
             headers: {
                 'X-Api-Key': context.auth.apiKey
             }

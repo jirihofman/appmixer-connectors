@@ -10,9 +10,11 @@ module.exports = {
             throw new context.CancelError('Application ID is required!');
         }
 
+        const lib = require('../../lib');
+        const host = lib.getApiHost(context);
         await context.httpRequest({
             method: 'DELETE',
-            url: `https://api.newrelic.com/v2/applications/${applicationId}.json`,
+            url: `${host}/v2/applications/${applicationId}.json`,
             headers: {
                 'X-Api-Key': context.auth.apiKey
             }

@@ -10,9 +10,11 @@ module.exports = {
             throw new context.CancelError('Policy Name is required!');
         }
 
+        const lib = require('../../lib');
+        const host = lib.getApiHost(context);
         const { data } = await context.httpRequest({
             method: 'POST',
-            url: 'https://api.newrelic.com/v2/alerts_policies.json',
+            url: `${host}/v2/alerts_policies.json`,
             headers: {
                 'X-Api-Key': context.auth.apiKey,
                 'Content-Type': 'application/json'

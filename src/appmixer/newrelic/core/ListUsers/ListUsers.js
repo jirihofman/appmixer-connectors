@@ -20,9 +20,10 @@ module.exports = {
             return lib.getOutputPortOptions(context, outputType, schema, { label: 'Users', value: 'users' });
         }
 
+        const host = lib.getApiHost(context);
         const { data } = await context.httpRequest({
             method: 'GET',
-            url: 'https://api.newrelic.com/v2/users.json',
+            url: `${host}/v2/users.json`,
             headers: {
                 'X-Api-Key': context.auth.apiKey
             }

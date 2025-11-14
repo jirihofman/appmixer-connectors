@@ -10,9 +10,11 @@ module.exports = {
             throw new context.CancelError('Server ID is required!');
         }
 
+        const lib = require('../../lib');
+        const host = lib.getApiHost(context);
         const { data } = await context.httpRequest({
             method: 'GET',
-            url: `https://api.newrelic.com/v2/servers/${serverId}.json`,
+            url: `${host}/v2/servers/${serverId}.json`,
             headers: {
                 'X-Api-Key': context.auth.apiKey
             }

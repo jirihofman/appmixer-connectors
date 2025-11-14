@@ -6,6 +6,10 @@ const DEFAULT_PREFIX = 'newrelic-objects-export';
 
 module.exports = {
 
+    getApiHost(context) {
+        return (context.auth.region === 'eu') ? 'https://api.eu.newrelic.com' : 'https://api.newrelic.com';
+    },
+
     async sendArrayOutput({
         context,
         outputPortName = 'out',

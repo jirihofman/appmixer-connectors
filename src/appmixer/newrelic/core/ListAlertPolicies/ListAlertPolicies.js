@@ -20,9 +20,10 @@ module.exports = {
             return lib.getOutputPortOptions(context, outputType, schema, { label: 'Policies', value: 'policies' });
         }
 
+        const host = lib.getApiHost(context);
         const { data } = await context.httpRequest({
             method: 'GET',
-            url: 'https://api.newrelic.com/v2/alerts_policies.json',
+            url: `${host}/v2/alerts_policies.json`,
             headers: {
                 'X-Api-Key': context.auth.apiKey
             }

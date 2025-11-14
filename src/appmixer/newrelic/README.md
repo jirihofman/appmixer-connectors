@@ -8,7 +8,15 @@ The connector uses API Key authentication. To obtain your API key:
 
 1. Log into your New Relic account
 2. Navigate to Account Settings > API Keys
-3. Create or copy a User API Key (starts with "NRAK-")
+3. Create or copy an API Key
+
+### Region Selection
+
+The connector supports both Global and EU regions:
+- **Global (default)**: Uses `https://api.newrelic.com`
+- **EU**: Uses `https://api.eu.newrelic.com`
+
+Select the appropriate region when configuring authentication based on your New Relic account location.
 
 ## Components
 
