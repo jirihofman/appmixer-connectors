@@ -31,6 +31,9 @@ jobs:
         run: ./scripts/npm_install.sh
       - name: Run unit tests and coverage
         run: npm run test-unit-coverage
+      - name: Remove unused node_modules anywhere except root
+        run: |
+          find src/appmixer -type d -name "node_modules" -exec rm -rf {} +
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4.2.1
         with:
