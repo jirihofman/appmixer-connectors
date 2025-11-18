@@ -28,7 +28,7 @@ jobs:
           path: src/appmixer/**/node_modules
           key: ${{ runner.os }}-connector-npm-${{ hashFiles('src/appmixer/**/package.json') }}
       - name: Install connector dependencies
-        run: ./scripts/npm_install.sh
+        run: node ./scripts/npm_install.js
       - name: Run unit tests and coverage
         run: npm run test-unit-coverage
       - name: Remove unused node_modules anywhere except root
