@@ -5,11 +5,11 @@ on:
   push:
     branches:
       - dev
-      # - sonar*
+      - sonar*
 
 jobs:
   sonarqube:
-    if: github.event.repository.fork == false
+    # if: github.event.repository.fork == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
