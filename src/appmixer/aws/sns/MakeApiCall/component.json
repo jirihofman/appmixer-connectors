@@ -1,0 +1,111 @@
+{
+    "name": "appmixer.aws.sns.MakeApiCall",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Performs an arbitrary authorized API call to AWS SNS API.",
+    "private": false,
+    "auth": {
+        "service": "appmixer:aws"
+    },
+    "properties": {
+        "schema": {
+            "properties": {
+                "region": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "region"
+            ]
+        },
+        "inspector": {
+            "inputs": {
+                "region": {
+                    "type": "select",
+                    "label": "Region",
+                    "index": 1,
+                    "tooltip": "Your AWS instance region.",
+                    "options": [
+                        { "value": "us-east-1", "content": "US East (N. Virginia)" },
+                        { "value": "us-west-2", "content": "US West (Oregon)" },
+                        { "value": "ap-southeast-1", "content": "Asia Pacific (Singapore)" },
+                        { "value": "ap-southeast-2", "content": "Asia Pacific (Sydney)" },
+                        { "value": "ap-northeast-1", "content": "Asia Pacific (Tokyo)" },
+                        { "value": "eu-west-1", "content": "Europe (Ireland)" }
+                    ]
+                }
+            }
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "method": {
+                        "type": "string",
+                        "enum": ["GET", "POST", "PUT", "PATCH", "DELETE"],
+                        "default": "POST"
+                    },
+                    "body": {
+                        "type": "string"
+                    },
+                    "contentType": {
+                        "type": "string"
+                    }
+                },
+                "required": ["url", "method"]
+            },
+            "inspector": {
+                "inputs": {
+                    "url": {
+                        "type": "text",
+                        "index": 1,
+                        "label": "API Endpoint URL",
+                        "tooltip": "Enter the full AWS SNS API endpoint URL. Example: https://sns.us-east-1.amazonaws.com/"
+                    },
+                    "method": {
+                        "type": "select",
+                        "index": 2,
+                        "label": "HTTP Method",
+                        "defaultValue": "POST",
+                        "tooltip": "Select the HTTP method for the API call. AWS SNS typically uses POST.",
+                        "options": [
+                            { "label": "GET", "value": "GET" },
+                            { "label": "POST", "value": "POST" },
+                            { "label": "PUT", "value": "PUT" },
+                            { "label": "PATCH", "value": "PATCH" },
+                            { "label": "DELETE", "value": "DELETE" }
+                        ]
+                    },
+                    "body": {
+                        "type": "textarea",
+                        "index": 3,
+                        "label": "Request Body",
+                        "tooltip": "Enter the request body for the API call. For AWS SNS, this typically includes Action and other parameters in URL-encoded format or JSON."
+                    },
+                    "contentType": {
+                        "type": "text",
+                        "index": 4,
+                        "label": "Content-Type (Optional)",
+                        "tooltip": "Custom Content-Type header. Defaults to 'application/x-www-form-urlencoded' if not specified."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "Status Code", "value": "status" },
+                { "label": "Response Headers", "value": "headers" },
+                { "label": "Response Body", "value": "body", "schema": { "type": "object", "properties": {} } }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjwhRE9DVFlQRSBzdmcgIFBVQkxJQyAnLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4nICAnaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkJz48c3ZnIGVuYWJsZS1iYWNrZ3JvdW5kPSJuZXcgMCAwIDEwMCAxMDAiIGhlaWdodD0iMTAwcHgiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHdpZHRoPSIxMDBweCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayI+PGcgaWQ9IkFtYXpvbl9DbG91ZFNlYXJjaCI+PGc+PHJlY3QgZmlsbD0iI0Q5QTc0MSIgaGVpZ2h0PSIxNi4zNCIgd2lkdGg9Ijg5LjE0NSIgeD0iNS40MjgiIHk9IjIxLjkxNiIvPjwvZz48Zz48cmVjdCBmaWxsPSIjODc2OTI5IiBoZWlnaHQ9IjIuNTA4IiB3aWR0aD0iODkuMTQ1IiB4PSI1LjQyOCIgeT0iMzguMjU2Ii8+PC9nPjxnPjxwYXRoIGQ9Ik01LjQyOCw0My4wNDFoODkuMTQ1djEzLjYzM0g1LjQyOFY0My4wNDF6IE05MS42OCw1My44MDN2LTcuODg5SDguMzJ2Ny44ODlIOTEuNjgiIGZpbGw9IiNEOUE3NDEiLz48L2c+PGc+PHJlY3QgZmlsbD0iIzg3NjkyOSIgaGVpZ2h0PSIyLjUxIiB3aWR0aD0iODkuMTQ1IiB4PSI1LjQyOCIgeT0iNTYuNjc0Ii8+PC9nPjxnPjxwYXRoIGQ9Ik01LjQyOCw2MS45NDFoODkuMTQ1djEzLjYzNUg1LjQyOFY2MS45NDF6IE05MS42OCw3Mi42ODl2LTcuODc3SDguMzJ2Ny44NzdIOTEuNjgiIGZpbGw9IiNEOUE3NDEiLz48L2c+PGc+PHJlY3QgZmlsbD0iIzg3NjkyOSIgaGVpZ2h0PSIyLjUwOCIgd2lkdGg9Ijg5LjE0NSIgeD0iNS40MjgiIHk9Ijc1LjU3NiIvPjwvZz48L2c+PC9zdmc+"
+}
