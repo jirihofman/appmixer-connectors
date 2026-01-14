@@ -114,8 +114,6 @@ describe('FindProjects', () => {
         try {
             const result = await FindProjects.receive(context);
 
-            console.log('lasjdflkjdsklfj');
-            console.log(result.data);
             if (result) {
                 assert(result, 'Should return result');
                 assert(result.port === 'out', 'Should use out port');
