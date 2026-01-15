@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "dependencies": {
     "csv-stringify": "6.2.0",
-    "mysql": "2.18.1",
-    "sqlstring": "2.3.3"
+    "mysql": "2.18.1"
   }
 }
