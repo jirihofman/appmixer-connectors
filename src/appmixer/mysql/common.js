@@ -92,11 +92,13 @@ async function runQuery(conn, query, params) {
 }
 
 /**
- * Validates a field name to prevent SQL injection.
- * Uses sqlstring.escapeId to safely escape the identifier and then
- * extracts the escaped name. This ensures only valid identifiers are used.
+ * Validates and escapes a field name to prevent SQL injection.
+ * First validates the field name against a strict regex pattern,
+ * then uses sqlstring.escapeId for proper SQL identifier escaping.
+ * Valid identifiers contain only alphanumeric characters and underscores,
+ * and must start with a letter or underscore.
  * @param {string} fieldName - The field name to validate
- * @returns {string} - The original field name if valid
+ * @returns {string} - The validated (but not escaped) field name for use in JavaScript
  * @throws {Error} - If the field name is invalid
  */
 function validateIdentifier(fieldName) {
@@ -112,7 +114,6 @@ function validateIdentifier(fieldName) {
         throw new Error('Invalid identifier: field name cannot be empty');
     }
 
-    // Use sqlstring.escapeId to escape the identifier, then verify it's a simple identifier
     // Valid MySQL identifiers: alphanumeric, underscore, and can start with underscore or letter
     // We use a strict pattern that allows only safe characters
     const validIdentifierPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
@@ -120,6 +121,17 @@ function validateIdentifier(fieldName) {
     if (!validIdentifierPattern.test(trimmed)) {
         throw new Error(`Invalid identifier: "${trimmed}" contains invalid characters. ` +
             'Only letters, numbers, and underscores are allowed, and it must start with a letter or underscore.');
+    }
+
+    // Additionally verify using sqlstring.escapeId that the identifier is safe
+    // This provides defense in depth - if the regex ever has a bug,
+    // sqlstring.escapeId will still properly escape the identifier
+    const escaped = sqlstring.escapeId(trimmed);
+
+    // The escaped form should be `trimmed` wrapped in backticks with no internal escaping needed
+    // If the escaped version differs significantly, it means there were special characters
+    if (escaped !== '`' + trimmed + '`') {
+        throw new Error(`Invalid identifier: "${trimmed}" failed sqlstring validation.`);
     }
 
     return trimmed;
@@ -212,7 +224,5 @@ module.exports = {
 
     validateIdentifier,
 
-    validateReferenceFields,
-
-    sqlstring
+    validateReferenceFields
 };
