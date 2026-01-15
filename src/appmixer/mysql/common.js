@@ -1,5 +1,6 @@
 'use strict';
 const mysql = require('mysql');
+const sqlstring = require('sqlstring');
 const EventEmitter = require('events');
 
 class StreamProcessor {
@@ -90,6 +91,62 @@ async function runQuery(conn, query, params) {
     return await conn.query(query, params).stream({ highWaterMark: 10 });
 }
 
+/**
+ * Validates a field name to prevent SQL injection.
+ * Uses sqlstring.escapeId to safely escape the identifier and then
+ * extracts the escaped name. This ensures only valid identifiers are used.
+ * @param {string} fieldName - The field name to validate
+ * @returns {string} - The original field name if valid
+ * @throws {Error} - If the field name is invalid
+ */
+function validateIdentifier(fieldName) {
+
+    if (!fieldName || typeof fieldName !== 'string') {
+        throw new Error('Invalid identifier: field name must be a non-empty string');
+    }
+
+    // Trim whitespace
+    const trimmed = fieldName.trim();
+
+    if (trimmed.length === 0) {
+        throw new Error('Invalid identifier: field name cannot be empty');
+    }
+
+    // Use sqlstring.escapeId to escape the identifier, then verify it's a simple identifier
+    // Valid MySQL identifiers: alphanumeric, underscore, and can start with underscore or letter
+    // We use a strict pattern that allows only safe characters
+    const validIdentifierPattern = /^[a-zA-Z_][a-zA-Z0-9_]*$/;
+
+    if (!validIdentifierPattern.test(trimmed)) {
+        throw new Error(`Invalid identifier: "${trimmed}" contains invalid characters. ` +
+            'Only letters, numbers, and underscores are allowed, and it must start with a letter or underscore.');
+    }
+
+    return trimmed;
+}
+
+/**
+ * Validates a comma-separated list of field names.
+ * @param {string} referenceFields - Comma-separated list of field names
+ * @returns {string[]} - Array of validated field names
+ */
+function validateReferenceFields(referenceFields) {
+
+    if (!referenceFields || typeof referenceFields !== 'string') {
+        return [];
+    }
+
+    const trimmed = referenceFields.trim();
+    if (trimmed.length === 0) {
+        return [];
+    }
+
+    const fields = trimmed.split(',').map(field => field.trim()).filter(field => field.length > 0);
+
+    // Validate each field
+    return fields.map(field => validateIdentifier(field));
+}
+
 module.exports = {
 
     StreamProcessor,
@@ -151,5 +208,11 @@ module.exports = {
         return returnStoreId;
     },
 
-    runQuery
+    runQuery,
+
+    validateIdentifier,
+
+    validateReferenceFields,
+
+    sqlstring
 };

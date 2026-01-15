@@ -1,5 +1,5 @@
 'use strict';
-const { ensureStore, createQueryProcessor } = require('../../common');
+const { ensureStore, createQueryProcessor, validateIdentifier } = require('../../common');
 
 async function processDeletedRowsStart(context, storeId, query, lock, idField) {
 
@@ -32,7 +32,8 @@ module.exports = {
 
     async start(context) {
 
-        const { query, idField } = context.properties;
+        const { query } = context.properties;
+        const idField = validateIdentifier(context.properties.idField);
         let { storeId } = context.properties;
 
         storeId = await ensureStore(context, storeId, 'DeletedRow-' + context.componentId);
@@ -72,7 +73,8 @@ module.exports = {
             return;
         }
 
-        const { query, idField } = context.properties;
+        const { query } = context.properties;
+        const idField = validateIdentifier(context.properties.idField);
 
         let { storeId } = context.properties;
         if (!storeId) {

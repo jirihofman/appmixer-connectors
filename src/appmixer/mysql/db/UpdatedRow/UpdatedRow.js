@@ -1,5 +1,5 @@
 'use strict';
-const { ensureStore, createQueryProcessor } = require('../../common');
+const { ensureStore, createQueryProcessor, validateIdentifier, validateReferenceFields } = require('../../common');
 
 async function processUpdatedRows(context, storeId, query, params, lock, idField) {
 
@@ -16,7 +16,8 @@ module.exports = {
 
     async start(context) {
 
-        const { idField, recordOldValues, detectOnStop, query } = context.properties;
+        const { recordOldValues, detectOnStop, query } = context.properties;
+        const idField = validateIdentifier(context.properties.idField);
         let { storeId } = context.properties;
 
         const isInitialized = await context.stateGet('initialized');
@@ -91,7 +92,8 @@ module.exports = {
             return;
         }
 
-        const { query, idField } = context.properties;
+        const { query } = context.properties;
+        const idField = validateIdentifier(context.properties.idField);
 
         let lock;
         try {
@@ -121,7 +123,8 @@ module.exports = {
 
     async receive(context) {
 
-        const { recordOldValues, referenceFields } = context.properties;
+        const { recordOldValues } = context.properties;
+        const referenceFieldsArray = validateReferenceFields(context.properties.referenceFields);
 
         if (!recordOldValues && context.messages.webhook.content.data.type === 'insert') {
 
@@ -143,8 +146,7 @@ module.exports = {
 
             const item = context.messages.webhook.content.data.currentValue;
             if (JSON.stringify(item.value) !== JSON.stringify(item.oldValue)) {
-                if (referenceFields?.trim()) {
-                    const referenceFieldsArray = (referenceFields || '').split(',').map(field => field.trim());
+                if (referenceFieldsArray.length > 0) {
                     referenceFieldsArray.forEach(field => {
                         if (item.value[field] !== item.oldValue[field]) {
                             fire = true;

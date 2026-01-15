@@ -1,5 +1,5 @@
 'use strict';
-const { ensureStore, createQueryProcessor } = require('../../common');
+const { ensureStore, createQueryProcessor, validateIdentifier, validateReferenceFields } = require('../../common');
 
 async function processQueryRows(context, storeId, query, lock, idField) {
 
@@ -16,7 +16,8 @@ module.exports = {
 
     async start(context) {
 
-        const { idField, query } = context.properties;
+        const { query } = context.properties;
+        const idField = validateIdentifier(context.properties.idField);
         let { storeId } = context.properties;
 
         storeId = await ensureStore(context, storeId, 'WatchRows-' + context.componentId);
@@ -55,7 +56,8 @@ module.exports = {
 
     async tick(context) {
 
-        const { query, idField } = context.properties;
+        const { query } = context.properties;
+        const idField = validateIdentifier(context.properties.idField);
 
         if (await context.stateGet('ignoreNextTick')) {
             await context.stateSet('ignoreNextTick', false);
@@ -83,7 +85,7 @@ module.exports = {
 
     async receive(context) {
 
-        const { referenceFields } = context.properties;
+        const referenceFieldsArray = validateReferenceFields(context.properties.referenceFields);
 
         if (context.messages.webhook.content.data.type === 'update') {
 
@@ -94,8 +96,7 @@ module.exports = {
 
             const item = context.messages.webhook.content.data.currentValue;
             if (JSON.stringify(item.value) !== JSON.stringify(item.oldValue)) {
-                if (referenceFields?.trim()) {
-                    const referenceFieldsArray = (referenceFields || '').split(',').map(field => field.trim());
+                if (referenceFieldsArray.length > 0) {
                     referenceFieldsArray.forEach(field => {
                         if (item.value[field] !== item.oldValue[field]) {
                             fire = true;

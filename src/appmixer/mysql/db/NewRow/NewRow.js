@@ -1,5 +1,5 @@
 'use strict';
-const { ensureStore, createQueryProcessor } = require('../../common');
+const { ensureStore, createQueryProcessor, validateIdentifier } = require('../../common');
 
 async function processNewRows(context, storeId, query, params, lock, idField) {
 
@@ -16,7 +16,8 @@ module.exports = {
 
     async start(context) {
 
-        const { query, idField, detectOnStop } = context.properties;
+        const { query, detectOnStop } = context.properties;
+        const idField = validateIdentifier(context.properties.idField);
         let { storeId } = context.properties;
 
         const isInitialized = await context.stateGet('initialized');
@@ -97,7 +98,8 @@ module.exports = {
         }
 
         try {
-            const { query, idField } = context.properties;
+            const { query } = context.properties;
+            const idField = validateIdentifier(context.properties.idField);
             let { storeId } = context.properties;
             if (!storeId) {
                 storeId = await context.stateGet('storeId');
