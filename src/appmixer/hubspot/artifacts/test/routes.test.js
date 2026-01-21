@@ -111,6 +111,34 @@ describe('POST /events handler', () => {
         assert.equal(context.triggerListeners.callCount, 0, 'triggerListeners should not be called');
     });
 
+    it('no call to triggerComponent for ignored company properties', async () => {
+
+        const req = {
+            payload: [
+                {
+                    eventId: 841732359,
+                    subscriptionId: 2921817,
+                    portalId: PORTAL_ID_AIRBUS,
+                    appId: 2036647,
+                    occurredAt: 1726820305517,
+                    subscriptionType: 'company.propertyChange',
+                    attemptNumber: 0,
+                    objectId: 38533722672,
+                    propertyName: 'createdate',
+                    propertyValue: '1726820305522',
+                    changeSource: 'CRM_UI',
+                    sourceId: 'test-unit'
+                }
+            ]
+        };
+
+        // Call the handler with the payload.
+        await handler(req);
+
+        // Expecting no calls to triggerListeners.
+        assert.equal(context.triggerListeners.callCount, 0, 'triggerListeners should not be called');
+    });
+
     it('multiple changes of the same contact in a single event', async () => {
 
         // Fixtures
@@ -356,4 +384,3 @@ describe('POST /events handler', () => {
         }
     });
 });
-

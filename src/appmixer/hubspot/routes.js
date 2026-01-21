@@ -1,7 +1,7 @@
 'use strict';
 
 const _ = require('lodash');
-const { WATCHED_PROPERTIES_CONTACT, WATCHED_PROPERTIES_DEAL } = require('./commons');
+const { WATCHED_PROPERTIES_CONTACT, WATCHED_PROPERTIES_DEAL, WATCHED_PROPERTIES_COMPANY } = require('./commons');
 
 module.exports = async (context) => {
 
@@ -100,6 +100,8 @@ module.exports = async (context) => {
                             watchedProperties = WATCHED_PROPERTIES_DEAL;
                         } else if (subscriptionType === 'contact.propertyChange') {
                             watchedProperties = WATCHED_PROPERTIES_CONTACT;
+                        } else if (subscriptionType === 'company.propertyChange') {
+                            watchedProperties = WATCHED_PROPERTIES_COMPANY;
                         } else {
                             throw new Error(`Unsupported subscriptionType: ${subscriptionType}`);
                         }
@@ -190,6 +192,14 @@ function getSubscriptionsByType(subscriptionType, context) {
         }));
     } else if (subscriptionType === 'contact.propertyChange') {
         subscriptions = WATCHED_PROPERTIES_CONTACT.map(propertyName => ({
+            enabled: true,
+            subscriptionDetails: {
+                subscriptionType,
+                propertyName
+            }
+        }));
+    } else if (subscriptionType === 'company.propertyChange') {
+        subscriptions = WATCHED_PROPERTIES_COMPANY.map(propertyName => ({
             enabled: true,
             subscriptionDetails: {
                 subscriptionType,
