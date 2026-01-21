@@ -36,7 +36,7 @@ class UpdatedCompany extends BaseSubscriptionComponent {
 
             for (const [companyId, event] of Object.entries(eventsByObjectId)) {
                 const cacheKey = 'hubspot-company-updated-' + companyId;
-                // Only track changes in these properties. These are the ones present in the CreateCompany inspector.
+                // Only track changes in these properties. These are the ones present in the UpdatedCompany inspector.
                 // Even if we limit the subscriptions for these properties only, we need this for flows that
                 // are already running and all the subscriptions.
                 if (WATCHED_PROPERTIES_COMPANY.includes(event.propertyName)) {
