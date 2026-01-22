@@ -1,0 +1,95 @@
+{
+    "name": "appmixer.redis.core.SetExpiration",
+    "description": "Sets a timeout on a key.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:redis"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "seconds": {
+                        "type": "integer"
+                    },
+                    "condition": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "key",
+                    "seconds"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "key": {
+                        "type": "text",
+                        "label": "Key",
+                        "index": 1,
+                        "tooltip": "The key to set expiration on."
+                    },
+                    "seconds": {
+                        "type": "number",
+                        "label": "Seconds",
+                        "index": 2,
+                        "tooltip": "Timeout in seconds."
+                    },
+                    "condition": {
+                        "type": "select",
+                        "label": "Condition",
+                        "index": 3,
+                        "tooltip": "Only update expiration if condition is met.",
+                        "options": [
+                            {
+                                "label": "None",
+                                "value": ""
+                            },
+                            {
+                                "label": "NX (only if no expiry)",
+                                "value": "NX"
+                            },
+                            {
+                                "label": "XX (only if has expiry)",
+                                "value": "XX"
+                            },
+                            {
+                                "label": "GT (only if new > current)",
+                                "value": "GT"
+                            },
+                            {
+                                "label": "LT (only if new < current)",
+                                "value": "LT"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Success",
+                    "value": "success"
+                },
+                {
+                    "label": "Key",
+                    "value": "key"
+                },
+                {
+                    "label": "Seconds",
+                    "value": "seconds"
+                }
+            ]
+        }
+    ]
+}

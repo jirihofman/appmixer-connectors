@@ -1,0 +1,68 @@
+{
+    "name": "appmixer.redis.core.GetHashField",
+    "description": "Returns the value associated with a field in a hash.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:redis"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "field": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "key",
+                    "field"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "key": {
+                        "type": "text",
+                        "label": "Key",
+                        "index": 1,
+                        "tooltip": "The hash key."
+                    },
+                    "field": {
+                        "type": "text",
+                        "label": "Field",
+                        "index": 2,
+                        "tooltip": "The field name."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Value",
+                    "value": "value"
+                },
+                {
+                    "label": "Exists",
+                    "value": "exists"
+                },
+                {
+                    "label": "Key",
+                    "value": "key"
+                },
+                {
+                    "label": "Field",
+                    "value": "field"
+                }
+            ]
+        }
+    ]
+}

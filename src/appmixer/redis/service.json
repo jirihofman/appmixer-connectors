@@ -1,0 +1,8 @@
+{
+    "name": "appmixer.redis",
+    "label": "Redis",
+    "category": "applications",
+    "description": "Redis is an in-memory data structure store used as a database, cache, and message broker.",
+    "version": "1.0.0",
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDY0IDY0Ij4KICA8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSI4IiBmaWxsPSIjZDgyYzIwIi8+CiAgPHRleHQgeD0iMzIiIHk9IjQxIiBmb250LXNpemU9IjI4IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjZmZmZmZmIiBmb250LWZhbWlseT0iQXJpYWwsIHNhbnMtc2VyaWYiPlI8L3RleHQ+Cjwvc3ZnPgo="
+}

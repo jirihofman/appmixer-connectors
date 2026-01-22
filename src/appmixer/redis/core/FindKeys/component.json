@@ -1,0 +1,54 @@
+{
+    "name": "appmixer.redis.core.FindKeys",
+    "description": "Returns all keys matching a pattern.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:redis"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "pattern": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "pattern"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "pattern": {
+                        "type": "text",
+                        "label": "Pattern",
+                        "index": 1,
+                        "tooltip": "Glob-style pattern (* matches any characters, ? matches single character)."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Keys",
+                    "value": "keys"
+                },
+                {
+                    "label": "Count",
+                    "value": "count"
+                },
+                {
+                    "label": "Pattern",
+                    "value": "pattern"
+                }
+            ]
+        }
+    ]
+}
