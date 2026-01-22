@@ -1,0 +1,538 @@
+{
+    "actions": [
+        {
+            "title": "GetValue",
+            "description": "Returns the string value of a key. If the key does not exist, returns nil.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/get/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "value": "Hello",
+                "exists": true,
+                "key": "mykey"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The key to retrieve"
+                    }
+                },
+                "required": [
+                    "key"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "SetValue",
+            "description": "Sets the string value of a key. Creates the key if it doesn't exist. Overwrites existing value.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/set/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "success": true,
+                "key": "mykey",
+                "value": "Hello"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The key to set"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "The value to store"
+                    },
+                    "expirationSeconds": {
+                        "type": "integer",
+                        "description": "Set key expiration in seconds"
+                    },
+                    "expirationMilliseconds": {
+                        "type": "integer",
+                        "description": "Set key expiration in milliseconds"
+                    },
+                    "condition": {
+                        "type": "string",
+                        "enum": [
+                            "NX",
+                            "XX"
+                        ],
+                        "description": "NX: set only if key does not exist. XX: set only if key exists."
+                    }
+                },
+                "required": [
+                    "key",
+                    "value"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "DeleteKey",
+            "description": "Deletes one or more keys. Keys that do not exist are ignored.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/del/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "deletedCount": 2,
+                "keys": "key1,key2,key3"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The key to delete (comma-separated for multiple keys, e.g., key1,key2,key3)"
+                    }
+                },
+                "required": [
+                    "key"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "KeyExists",
+            "description": "Determines whether one or more keys exist.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/exists/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "count": 2,
+                "exists": true,
+                "key": "key1,key2,nosuchkey"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The key(s) to check (comma-separated, e.g., key1,key2)"
+                    }
+                },
+                "required": [
+                    "key"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "SetExpiration",
+            "description": "Sets a timeout on a key. After the timeout expires, the key is automatically deleted.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/expire/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "success": true,
+                "key": "mykey",
+                "seconds": 10
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The key to set expiration on"
+                    },
+                    "seconds": {
+                        "type": "integer",
+                        "description": "Timeout in seconds"
+                    },
+                    "condition": {
+                        "type": "string",
+                        "enum": [
+                            "NX",
+                            "XX",
+                            "GT",
+                            "LT"
+                        ],
+                        "description": "NX: only if no expiry. XX: only if has expiry. GT: only if new > current. LT: only if new < current."
+                    }
+                },
+                "required": [
+                    "key",
+                    "seconds"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "GetTimeToLive",
+            "description": "Returns the remaining time to live of a key that has a timeout.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/ttl/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "ttl": 10,
+                "key": "mykey",
+                "hasExpiration": true
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The key to check"
+                    }
+                },
+                "required": [
+                    "key"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "FindKeys",
+            "description": "Returns all keys matching a pattern. Use with caution in production as it can block the server on large databases.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/keys/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "keys": [
+                    "firstname",
+                    "lastname"
+                ],
+                "count": 2,
+                "pattern": "*name*"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "pattern": {
+                        "type": "string",
+                        "description": "Glob-style pattern (* matches any characters, ? matches a single character)"
+                    }
+                },
+                "required": [
+                    "pattern"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "SetHashField",
+            "description": "Sets the specified field in a hash stored at key. Creates the hash if it doesn't exist.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/hset/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "created": 1,
+                "key": "myhash",
+                "field": "field1",
+                "value": "Hello"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The hash key"
+                    },
+                    "field": {
+                        "type": "string",
+                        "description": "The field name"
+                    },
+                    "value": {
+                        "type": "string",
+                        "description": "The value to set"
+                    }
+                },
+                "required": [
+                    "key",
+                    "field",
+                    "value"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "GetHashField",
+            "description": "Returns the value associated with a field in a hash.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/hget/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "value": "foo",
+                "exists": true,
+                "key": "myhash",
+                "field": "field1"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The hash key"
+                    },
+                    "field": {
+                        "type": "string",
+                        "description": "The field name"
+                    }
+                },
+                "required": [
+                    "key",
+                    "field"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "GetAllHashFields",
+            "description": "Returns all fields and values in a hash.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/hgetall/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "fields": {
+                    "field1": "Hello",
+                    "field2": "World"
+                },
+                "fieldCount": 2,
+                "key": "myhash",
+                "exists": true
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The hash key"
+                    }
+                },
+                "required": [
+                    "key"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "ListPrepend",
+            "description": "Prepends one or more elements to a list. Creates the list if it doesn't exist.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/lpush/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "length": 2,
+                "key": "mylist",
+                "elements": "hello,world"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The list key"
+                    },
+                    "element": {
+                        "type": "string",
+                        "description": "The element(s) to prepend (comma-separated to add multiple elements)"
+                    }
+                },
+                "required": [
+                    "key",
+                    "element"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "ListAppend",
+            "description": "Appends one or more elements to a list. Creates the list if it doesn't exist.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/rpush/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "length": 2,
+                "key": "mylist",
+                "elements": "hello,world"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The list key"
+                    },
+                    "element": {
+                        "type": "string",
+                        "description": "The element(s) to append (comma-separated to add multiple elements)"
+                    }
+                },
+                "required": [
+                    "key",
+                    "element"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "ListPopFirst",
+            "description": "Removes and returns the first element(s) from a list.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/lpop/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "element": "one",
+                "key": "mylist",
+                "exists": true
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The list key"
+                    },
+                    "count": {
+                        "type": "integer",
+                        "description": "Number of elements to pop (default: 1)"
+                    }
+                },
+                "required": [
+                    "key"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "ListGetRange",
+            "description": "Returns elements from a list within a specified range.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/lrange/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "elements": [
+                    "one",
+                    "two",
+                    "three"
+                ],
+                "count": 3,
+                "key": "mylist",
+                "start": 0,
+                "stop": -1
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The list key"
+                    },
+                    "start": {
+                        "type": "integer",
+                        "description": "Start index (0-based; negative values count from end)"
+                    },
+                    "stop": {
+                        "type": "integer",
+                        "description": "Stop index (inclusive; negative values count from end)"
+                    }
+                },
+                "required": [
+                    "key",
+                    "start",
+                    "stop"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        },
+        {
+            "title": "IncrementValue",
+            "description": "Increments the integer value of a key by one. If the key doesn't exist, it's set to 0 before incrementing.",
+            "type": "action",
+            "documentation": "https://redis.io/docs/latest/commands/incr/",
+            "endpointUrl": "redis://<host>:<port>",
+            "apiBaseUrl": "redis://<host>:<port>",
+            "method": "N/A",
+            "sampleResponse": {
+                "value": 11,
+                "key": "mykey"
+            },
+            "inputSchema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string",
+                        "description": "The key to increment"
+                    }
+                },
+                "required": [
+                    "key"
+                ]
+            },
+            "outputType": {
+                "outputType": "object"
+            }
+        }
+    ],
+    "authentication": {
+        "type": "apiKey"
+    },
+    "serviceJson": {
+        "name": "appmixer.redis",
+        "label": "Redis",
+        "category": "applications",
+        "description": "Redis connector implementing common Redis 6.2 commands (strings, hashes, lists, generic).",
+        "version": "1.0.0",
+        "icon": "https://redis.io/images/redis.svg"
+    }
+}
