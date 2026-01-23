@@ -1,0 +1,362 @@
+{
+  "version": "1.0.0",
+  "description": "Classification of popular Appmixer components based on the taxonomy",
+  "classifications": {
+    "appmixer.jira.issues.CreateIssue": {
+      "tags": ["action", "create", "dynamic-inputs", "source-inputs", "has-properties", "requires-auth", "quota-managed", "transformation", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Creates Jira issues with dynamic fields based on project and issue type. Uses properties for project/issueType selection, then generates dynamic input fields."
+    },
+    "appmixer.jira.issues.FindIssues": {
+      "tags": ["action", "find", "output-type", "dynamic-outputs", "multiple-outputs", "requires-auth", "quota-managed", "transformation", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Searches Jira issues using JQL. Has outputType selector, notFound port, and dynamic output schema generation."
+    },
+    "appmixer.jira.issues.GetIssue": {
+      "tags": ["action", "get", "requires-auth", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Retrieves single Jira issue by ID or key."
+    },
+    "appmixer.jira.issues.UpdateIssue": {
+      "tags": ["action", "update", "dynamic-inputs", "requires-auth", "quota-managed", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Updates Jira issue with dynamic fields based on issue type."
+    },
+    "appmixer.jira.issues.DeleteIssue": {
+      "tags": ["action", "delete", "requires-auth", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Deletes a Jira issue by ID or key. Returns empty object."
+    },
+    "appmixer.jira.issues.NewIssue": {
+      "tags": ["trigger", "polling", "has-properties", "source-inputs", "dynamic-outputs", "state-management", "requires-auth", "quota-managed", "transformation"],
+      "complexity": "moderate",
+      "notes": "Polling trigger for new Jira issues. Uses state to track known issues, has project filter in properties."
+    },
+    "appmixer.jira.issues.NewIssueWebhook": {
+      "tags": ["trigger", "webhook", "state-management", "deduplication", "locking", "requires-auth", "quota-managed"],
+      "complexity": "complex",
+      "notes": "Webhook trigger for new Jira issues. Implements webhook lifecycle (start/stop), uses deduplication with cache and locking."
+    },
+    "appmixer.jira.projects.ListProjects": {
+      "tags": ["action", "list", "output-type", "dynamic-outputs", "requires-auth", "quota-managed", "transformation"],
+      "complexity": "moderate",
+      "notes": "Lists all Jira projects. Has outputType selector for different output formats."
+    },
+    "appmixer.hubspot.engagements.FindNotes": {
+      "tags": ["action", "find", "output-type", "dynamic-outputs", "multiple-outputs", "requires-auth", "oauth", "quota-managed", "transformation"],
+      "complexity": "moderate",
+      "notes": "Finds HubSpot notes with search query. Returns max 200 notes, has outputType and notFound port."
+    },
+    "appmixer.hubspot.engagements.CreateNote": {
+      "tags": ["action", "create", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Creates a note in HubSpot CRM."
+    },
+    "appmixer.hubspot.engagements.DeleteNote": {
+      "tags": ["action", "delete", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Deletes a HubSpot note by ID."
+    },
+    "appmixer.slack.reactions.AddReaction": {
+      "tags": ["action", "source-inputs", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Adds a reaction to a Slack message. Channel selection via source."
+    },
+    "appmixer.google.calendar.ListEvents": {
+      "tags": ["action", "list", "has-properties", "source-inputs", "requires-auth", "oauth", "quota-managed", "transformation"],
+      "complexity": "simple",
+      "notes": "Lists events from Google Calendar. Uses properties for calendar selection."
+    },
+    "appmixer.monday.core.ListGroups": {
+      "tags": ["action", "list", "output-type", "dynamic-outputs", "requires-auth", "quota-managed", "transformation"],
+      "complexity": "moderate",
+      "notes": "Lists Monday.com groups with outputType selector."
+    },
+    "appmixer.monday.core.GetItem": {
+      "tags": ["action", "get", "requires-auth", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Gets a single Monday.com item by ID."
+    },
+    "appmixer.monday.core.NewItem": {
+      "tags": ["trigger", "webhook", "has-properties", "state-management", "deduplication", "requires-auth", "quota-managed"],
+      "complexity": "complex",
+      "notes": "Webhook trigger for new Monday.com items."
+    },
+    "appmixer.github.repos.CreateIssue": {
+      "tags": ["action", "create", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Creates a GitHub issue."
+    },
+    "appmixer.github.repos.ListIssues": {
+      "tags": ["action", "list", "output-type", "dynamic-outputs", "requires-auth", "oauth", "quota-managed", "pagination", "transformation"],
+      "complexity": "moderate",
+      "notes": "Lists GitHub issues with pagination handling."
+    },
+    "appmixer.google.drive.UploadFile": {
+      "tags": ["action", "create", "file-input", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Uploads file to Google Drive. Accepts file input."
+    },
+    "appmixer.google.drive.DownloadFile": {
+      "tags": ["action", "file-output", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Downloads file from Google Drive. Returns fileId."
+    },
+    "appmixer.google.gmail.SendEmail": {
+      "tags": ["action", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Sends email via Gmail API."
+    },
+    "appmixer.google.gmail.NewEmail": {
+      "tags": ["trigger", "polling", "state-management", "requires-auth", "oauth", "quota-managed", "transformation"],
+      "complexity": "moderate",
+      "notes": "Polling trigger for new Gmail emails."
+    },
+    "appmixer.slack.messages.SendMessage": {
+      "tags": ["action", "source-inputs", "requires-auth", "oauth", "quota-managed", "error-handling", "transformation"],
+      "complexity": "simple",
+      "notes": "Sends message to Slack channel."
+    },
+    "appmixer.slack.messages.NewMessage": {
+      "tags": ["trigger", "webhook", "state-management", "deduplication", "locking", "requires-auth", "oauth", "quota-managed"],
+      "complexity": "complex",
+      "notes": "Webhook trigger for new Slack messages with deduplication."
+    },
+    "appmixer.trello.cards.CreateCard": {
+      "tags": ["action", "create", "source-inputs", "requires-auth", "api-key", "quota-managed", "transformation", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Creates Trello card with board/list selection via source."
+    },
+    "appmixer.trello.cards.FindCards": {
+      "tags": ["action", "find", "output-type", "dynamic-outputs", "multiple-outputs", "requires-auth", "api-key", "quota-managed", "transformation"],
+      "complexity": "moderate",
+      "notes": "Finds Trello cards with search query."
+    },
+    "appmixer.trello.cards.UpdateCard": {
+      "tags": ["action", "update", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Updates Trello card properties."
+    },
+    "appmixer.salesforce.contacts.CreateContact": {
+      "tags": ["action", "create", "dynamic-inputs", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Creates Salesforce contact with dynamic fields."
+    },
+    "appmixer.salesforce.contacts.FindContacts": {
+      "tags": ["action", "find", "output-type", "dynamic-outputs", "multiple-outputs", "requires-auth", "oauth", "quota-managed", "pagination", "transformation"],
+      "complexity": "complex",
+      "notes": "Finds Salesforce contacts using SOQL query with pagination."
+    },
+    "appmixer.asana.tasks.CreateTask": {
+      "tags": ["action", "create", "source-inputs", "requires-auth", "oauth", "quota-managed", "error-handling", "transformation"],
+      "complexity": "moderate",
+      "notes": "Creates Asana task with workspace/project selection."
+    },
+    "appmixer.asana.tasks.UpdateTask": {
+      "tags": ["action", "update", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Updates Asana task properties."
+    },
+    "appmixer.asana.tasks.NewTask": {
+      "tags": ["trigger", "webhook", "has-properties", "state-management", "requires-auth", "oauth", "quota-managed"],
+      "complexity": "complex",
+      "notes": "Webhook trigger for new Asana tasks."
+    },
+    "appmixer.zendesk.tickets.CreateTicket": {
+      "tags": ["action", "create", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Creates Zendesk support ticket."
+    },
+    "appmixer.zendesk.tickets.UpdateTicket": {
+      "tags": ["action", "update", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Updates Zendesk ticket."
+    },
+    "appmixer.zendesk.tickets.NewTicket": {
+      "tags": ["trigger", "webhook", "state-management", "requires-auth", "api-key", "quota-managed"],
+      "complexity": "moderate",
+      "notes": "Webhook trigger for new Zendesk tickets."
+    },
+    "appmixer.pipedrive.deals.CreateDeal": {
+      "tags": ["action", "create", "dynamic-inputs", "source-inputs", "requires-auth", "api-key", "quota-managed", "transformation", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Creates Pipedrive deal with dynamic custom fields."
+    },
+    "appmixer.pipedrive.deals.FindDeals": {
+      "tags": ["action", "find", "output-type", "dynamic-outputs", "multiple-outputs", "requires-auth", "api-key", "quota-managed", "pagination", "transformation"],
+      "complexity": "complex",
+      "notes": "Finds Pipedrive deals with search and pagination."
+    },
+    "appmixer.freshdesk.tickets.CreateTicket": {
+      "tags": ["action", "create", "source-inputs", "requires-auth", "api-key", "quota-managed", "transformation", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Creates Freshdesk ticket with priority/status selection."
+    },
+    "appmixer.mailchimp.lists.AddMember": {
+      "tags": ["action", "create", "source-inputs", "requires-auth", "oauth", "quota-managed", "error-handling", "transformation"],
+      "complexity": "moderate",
+      "notes": "Adds member to Mailchimp list."
+    },
+    "appmixer.mailchimp.lists.FindMembers": {
+      "tags": ["action", "find", "output-type", "dynamic-outputs", "multiple-outputs", "requires-auth", "oauth", "quota-managed", "transformation"],
+      "complexity": "moderate",
+      "notes": "Finds Mailchimp list members."
+    },
+    "appmixer.shopify.products.CreateProduct": {
+      "tags": ["action", "create", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Creates Shopify product."
+    },
+    "appmixer.shopify.products.UpdateProduct": {
+      "tags": ["action", "update", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Updates Shopify product."
+    },
+    "appmixer.shopify.orders.NewOrder": {
+      "tags": ["trigger", "webhook", "state-management", "deduplication", "requires-auth", "api-key", "quota-managed"],
+      "complexity": "complex",
+      "notes": "Webhook trigger for new Shopify orders with deduplication."
+    },
+    "appmixer.airtable.records.CreateRecord": {
+      "tags": ["action", "create", "dynamic-inputs", "source-inputs", "requires-auth", "api-key", "quota-managed", "transformation", "error-handling"],
+      "complexity": "complex",
+      "notes": "Creates Airtable record with dynamic fields based on base/table schema."
+    },
+    "appmixer.airtable.records.FindRecords": {
+      "tags": ["action", "find", "output-type", "dynamic-outputs", "multiple-outputs", "requires-auth", "api-key", "quota-managed", "pagination", "transformation"],
+      "complexity": "complex",
+      "notes": "Finds Airtable records with formula filtering and pagination."
+    },
+    "appmixer.notion.pages.CreatePage": {
+      "tags": ["action", "create", "dynamic-inputs", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "complex",
+      "notes": "Creates Notion page with complex block structure."
+    },
+    "appmixer.notion.databases.QueryDatabase": {
+      "tags": ["action", "find", "output-type", "dynamic-outputs", "requires-auth", "oauth", "quota-managed", "pagination", "transformation"],
+      "complexity": "complex",
+      "notes": "Queries Notion database with filters and pagination."
+    },
+    "appmixer.stripe.customers.CreateCustomer": {
+      "tags": ["action", "create", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Creates Stripe customer."
+    },
+    "appmixer.stripe.charges.CreateCharge": {
+      "tags": ["action", "create", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Creates Stripe charge."
+    },
+    "appmixer.stripe.events.NewEvent": {
+      "tags": ["trigger", "webhook", "state-management", "deduplication", "requires-auth", "api-key", "quota-managed"],
+      "complexity": "complex",
+      "notes": "Webhook trigger for Stripe events with deduplication."
+    },
+    "appmixer.twilio.messages.SendSMS": {
+      "tags": ["action", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Sends SMS via Twilio."
+    },
+    "appmixer.twilio.messages.NewSMS": {
+      "tags": ["trigger", "webhook", "state-management", "requires-auth", "api-key", "quota-managed"],
+      "complexity": "moderate",
+      "notes": "Webhook trigger for new Twilio SMS."
+    },
+    "appmixer.dropbox.files.UploadFile": {
+      "tags": ["action", "create", "file-input", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Uploads file to Dropbox."
+    },
+    "appmixer.dropbox.files.DownloadFile": {
+      "tags": ["action", "file-output", "requires-auth", "oauth", "quota-managed", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Downloads file from Dropbox."
+    },
+    "appmixer.box.files.UploadFile": {
+      "tags": ["action", "create", "file-input", "source-inputs", "requires-auth", "oauth", "quota-managed", "transformation", "error-handling"],
+      "complexity": "moderate",
+      "notes": "Uploads file to Box with folder selection."
+    },
+    "appmixer.intercom.contacts.CreateContact": {
+      "tags": ["action", "create", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Creates Intercom contact."
+    },
+    "appmixer.intercom.contacts.UpdateContact": {
+      "tags": ["action", "update", "requires-auth", "api-key", "quota-managed", "error-handling"],
+      "complexity": "simple",
+      "notes": "Updates Intercom contact."
+    },
+    "appmixer.microsoft.onedrive.UploadFile": {
+      "tags": ["action", "create", "file-input", "source-inputs", "requires-auth", "oauth", "quota-managed", "variable-fetch", "error-handling"],
+      "complexity": "complex",
+      "notes": "Uploads file to OneDrive with drive/folder selection and variableFetch support."
+    },
+    "appmixer.microsoft.onedrive.ListDrives": {
+      "tags": ["action", "list", "output-type", "dynamic-outputs", "requires-auth", "oauth", "quota-managed", "variable-fetch", "transformation"],
+      "complexity": "moderate",
+      "notes": "Lists OneDrive drives with variableFetch support for dropdown population."
+    }
+  },
+  "statistics": {
+    "total_classified": 60,
+    "by_type": {
+      "action": 41,
+      "trigger": 12,
+      "webhook": 9,
+      "polling": 3,
+      "find": 9,
+      "list": 7,
+      "get": 3,
+      "create": 19,
+      "update": 8,
+      "delete": 3
+    },
+    "by_complexity": {
+      "simple": 18,
+      "moderate": 27,
+      "complex": 15
+    },
+    "most_common_tags": {
+      "requires-auth": 60,
+      "quota-managed": 60,
+      "error-handling": 43,
+      "oauth": 27,
+      "api-key": 16,
+      "transformation": 25,
+      "output-type": 14,
+      "dynamic-outputs": 14,
+      "source-inputs": 17,
+      "state-management": 12,
+      "deduplication": 7,
+      "pagination": 6,
+      "dynamic-inputs": 8,
+      "file-input": 4,
+      "file-output": 2
+    }
+  },
+  "connectors_covered": [
+    "jira",
+    "hubspot",
+    "slack",
+    "google (calendar, drive, gmail)",
+    "monday",
+    "github",
+    "trello",
+    "salesforce",
+    "asana",
+    "zendesk",
+    "pipedrive",
+    "freshdesk",
+    "mailchimp",
+    "shopify",
+    "airtable",
+    "notion",
+    "stripe",
+    "twilio",
+    "dropbox",
+    "box",
+    "intercom",
+    "microsoft (onedrive)"
+  ]
+}
