@@ -1,0 +1,78 @@
+{
+    "name": "appmixer.redis.core.SetHashField",
+    "description": "Sets the specified field in a hash.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:redis"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "field": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "key",
+                    "field",
+                    "value"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "key": {
+                        "type": "text",
+                        "label": "Key",
+                        "index": 1,
+                        "tooltip": "The hash key."
+                    },
+                    "field": {
+                        "type": "text",
+                        "label": "Field",
+                        "index": 2,
+                        "tooltip": "The field name."
+                    },
+                    "value": {
+                        "type": "text",
+                        "label": "Value",
+                        "index": 3,
+                        "tooltip": "The value to set."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Created",
+                    "value": "created"
+                },
+                {
+                    "label": "Key",
+                    "value": "key"
+                },
+                {
+                    "label": "Field",
+                    "value": "field"
+                },
+                {
+                    "label": "Value",
+                    "value": "value"
+                }
+            ]
+        }
+    ]
+}

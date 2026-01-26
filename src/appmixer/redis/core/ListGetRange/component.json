@@ -1,0 +1,82 @@
+{
+    "name": "appmixer.redis.core.ListGetRange",
+    "description": "Returns elements from a list within a specified range.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:redis"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "start": {
+                        "type": "integer"
+                    },
+                    "stop": {
+                        "type": "integer"
+                    }
+                },
+                "required": [
+                    "key",
+                    "start",
+                    "stop"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "key": {
+                        "type": "text",
+                        "label": "Key",
+                        "index": 1,
+                        "tooltip": "The list key."
+                    },
+                    "start": {
+                        "type": "number",
+                        "label": "Start",
+                        "index": 2,
+                        "tooltip": "Start index (0-based)."
+                    },
+                    "stop": {
+                        "type": "number",
+                        "label": "Stop",
+                        "index": 3,
+                        "tooltip": "Stop index (inclusive)."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Elements",
+                    "value": "elements"
+                },
+                {
+                    "label": "Count",
+                    "value": "count"
+                },
+                {
+                    "label": "Key",
+                    "value": "key"
+                },
+                {
+                    "label": "Start",
+                    "value": "start"
+                },
+                {
+                    "label": "Stop",
+                    "value": "stop"
+                }
+            ]
+        }
+    ]
+}

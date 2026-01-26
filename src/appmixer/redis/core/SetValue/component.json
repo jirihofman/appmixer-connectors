@@ -1,0 +1,105 @@
+{
+    "name": "appmixer.redis.core.SetValue",
+    "description": "Sets the string value of a key.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:redis"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "value": {
+                        "type": "string"
+                    },
+                    "expirationSeconds": {
+                        "type": "integer"
+                    },
+                    "expirationMilliseconds": {
+                        "type": "integer"
+                    },
+                    "condition": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "key",
+                    "value"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "key": {
+                        "type": "text",
+                        "label": "Key",
+                        "index": 1,
+                        "tooltip": "The key to set."
+                    },
+                    "value": {
+                        "type": "text",
+                        "label": "Value",
+                        "index": 2,
+                        "tooltip": "The value to store."
+                    },
+                    "expirationSeconds": {
+                        "type": "number",
+                        "label": "Expiration Seconds",
+                        "index": 3,
+                        "tooltip": "Set key expiration in seconds."
+                    },
+                    "expirationMilliseconds": {
+                        "type": "number",
+                        "label": "Expiration Milliseconds",
+                        "index": 4,
+                        "tooltip": "Set key expiration in milliseconds."
+                    },
+                    "condition": {
+                        "type": "select",
+                        "label": "Condition",
+                        "index": 5,
+                        "tooltip": "Only set the key when a condition is met.",
+                        "options": [
+                            {
+                                "label": "None",
+                                "value": ""
+                            },
+                            {
+                                "label": "NX (only if not exists)",
+                                "value": "NX"
+                            },
+                            {
+                                "label": "XX (only if exists)",
+                                "value": "XX"
+                            }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Success",
+                    "value": "success"
+                },
+                {
+                    "label": "Key",
+                    "value": "key"
+                },
+                {
+                    "label": "Value",
+                    "value": "value"
+                }
+            ]
+        }
+    ]
+}

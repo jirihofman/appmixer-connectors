@@ -1,0 +1,64 @@
+{
+    "name": "appmixer.redis.core.ListAppend",
+    "description": "Appends one or more elements to a list.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:redis"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "key": {
+                        "type": "string"
+                    },
+                    "element": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "key",
+                    "element"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "key": {
+                        "type": "text",
+                        "label": "Key",
+                        "index": 1,
+                        "tooltip": "The list key."
+                    },
+                    "element": {
+                        "type": "text",
+                        "label": "Element",
+                        "index": 2,
+                        "tooltip": "The element(s) to append (comma-separated)."
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Length",
+                    "value": "length"
+                },
+                {
+                    "label": "Key",
+                    "value": "key"
+                },
+                {
+                    "label": "Elements",
+                    "value": "elements"
+                }
+            ]
+        }
+    ]
+}
