@@ -4,9 +4,9 @@ module.exports = {
     async receive(context) {
         const {
             url,
-            monitor_type,
-            pronounceable_name,
-            check_frequency,
+            monitor_type: monitorType,
+            pronounceable_name: pronounceableName,
+            check_frequency: checkFrequency,
             call,
             sms,
             email,
@@ -19,11 +19,11 @@ module.exports = {
 
         const body = {
             url,
-            monitor_type: monitor_type || 'status'
+            monitor_type: monitorType || 'status'
         };
 
-        if (pronounceable_name) body.pronounceable_name = pronounceable_name;
-        if (check_frequency) body.check_frequency = check_frequency;
+        if (pronounceableName) body.pronounceable_name = pronounceableName;
+        if (checkFrequency) body.check_frequency = checkFrequency;
         if (typeof call === 'boolean') body.call = call;
         if (typeof sms === 'boolean') body.sms = sms;
         if (typeof email === 'boolean') body.email = email;

@@ -2,14 +2,14 @@
 
 module.exports = {
     async receive(context) {
-        const { incidentId, requester_email } = context.messages.in.content;
+        const { incidentId, requester_email: requesterEmail } = context.messages.in.content;
 
         if (!incidentId) {
             throw new context.CancelError('Incident ID is required!');
         }
 
         const body = {};
-        if (requester_email) body.requester_email = requester_email;
+        if (requesterEmail) body.requester_email = requesterEmail;
 
         await context.httpRequest({
             method: 'PATCH',

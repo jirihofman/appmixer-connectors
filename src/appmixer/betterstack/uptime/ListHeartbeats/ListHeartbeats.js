@@ -23,7 +23,7 @@ module.exports = {
 
         const response = await context.httpRequest({
             method: 'GET',
-            url: `https://uptime.betterstack.com/api/v2/heartbeats`,
+            url: 'https://uptime.betterstack.com/api/v2/heartbeats',
             headers: {
                 'Authorization': `Bearer ${context.auth.apiToken}`
             },

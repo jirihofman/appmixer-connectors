@@ -8,7 +8,7 @@ module.exports = {
             throw new context.CancelError('Monitor ID is required!');
         }
 
-        const response = await context.httpRequest({
+        await context.httpRequest({
             method: 'POST',
             url: `https://uptime.betterstack.com/api/v2/heartbeats/${monitorId}`,
             headers: {
