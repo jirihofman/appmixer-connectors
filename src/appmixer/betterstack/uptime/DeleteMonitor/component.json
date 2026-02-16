@@ -1,0 +1,46 @@
+{
+    "name": "appmixer.betterstack.uptime.DeleteMonitor",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Delete a monitor from Better Stack Uptime.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:betterstack"
+    },
+    "quota": {
+        "manager": "appmixer:betterstack",
+        "resources": "requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "monitorId": {
+                        "type": "string"
+                    }
+                },
+                "required": ["monitorId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "monitorId": {
+                        "type": "text",
+                        "label": "Monitor ID",
+                        "index": 1,
+                        "tooltip": "The unique identifier of the monitor to delete"
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out"
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxMiIgZmlsbD0iIzFGMjkzNyIvPgogIDxwYXRoIGQ9Ik0yMCAyOEgyOE0zNiAyOEg0NE0yMCAzNkgyOE0zNiAzNkg0NCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxyZWN0IHg9IjE2IiB5PSIyMCIgd2lkdGg9IjMyIiBoZWlnaHQ9IjI0IiByeD0iNCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+"
+}

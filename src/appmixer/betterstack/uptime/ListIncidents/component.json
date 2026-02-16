@@ -1,0 +1,63 @@
+{
+    "name": "appmixer.betterstack.uptime.ListIncidents",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "List all incidents from Better Stack Uptime. Returns a maximum of 100 incidents per request.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:betterstack"
+    },
+    "quota": {
+        "manager": "appmixer:betterstack",
+        "resources": "requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "outputType": {
+                        "type": "string"
+                    }
+                }
+            },
+            "inspector": {
+                "inputs": {
+                    "outputType": {
+                        "type": "select",
+                        "label": "Output Type",
+                        "index": 1,
+                        "defaultValue": "array",
+                        "tooltip": "Choose whether you want to receive the result set as one complete list, first item only, or one item at a time.",
+                        "options": [
+                            { "label": "First Item Only", "value": "first" },
+                            { "label": "All items at once", "value": "array" },
+                            { "label": "One item at a time", "value": "object" },
+                            { "label": "Store to CSV file", "value": "file" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "source": {
+                "url": "/component/appmixer/betterstack/uptime/ListIncidents?outPort=out",
+                "data": {
+                    "properties": {
+                        "generateOutputPortOptions": true
+                    },
+                    "messages": {
+                        "in/outputType": "inputs/in/outputType"
+                    }
+                }
+            }
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxMiIgZmlsbD0iIzFGMjkzNyIvPgogIDxwYXRoIGQ9Ik0yMCAyOEgyOE0zNiAyOEg0NE0yMCAzNkgyOE0zNiAzNkg0NCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxyZWN0IHg9IjE2IiB5PSIyMCIgd2lkdGg9IjMyIiBoZWlnaHQ9IjI0IiByeD0iNCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+"
+}

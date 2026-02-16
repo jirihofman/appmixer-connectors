@@ -1,0 +1,132 @@
+{
+    "name": "appmixer.betterstack.uptime.CreateMonitor",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Create a new monitor in Better Stack Uptime. Monitor websites, APIs, ports, and more.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:betterstack"
+    },
+    "quota": {
+        "manager": "appmixer:betterstack",
+        "resources": "monitors.create",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string"
+                    },
+                    "monitor_type": {
+                        "type": "string"
+                    },
+                    "pronounceable_name": {
+                        "type": "string"
+                    },
+                    "check_frequency": {
+                        "type": "integer"
+                    },
+                    "call": {
+                        "type": "boolean"
+                    },
+                    "sms": {
+                        "type": "boolean"
+                    },
+                    "email": {
+                        "type": "boolean"
+                    },
+                    "push": {
+                        "type": "boolean"
+                    }
+                },
+                "required": ["url"]
+            },
+            "inspector": {
+                "inputs": {
+                    "url": {
+                        "type": "text",
+                        "label": "URL",
+                        "index": 1,
+                        "tooltip": "The URL to monitor (required for status, keyword, ping monitors)"
+                    },
+                    "monitor_type": {
+                        "type": "select",
+                        "label": "Monitor Type",
+                        "index": 2,
+                        "defaultValue": "status",
+                        "tooltip": "Type of monitor to create",
+                        "options": [
+                            { "label": "Status (HTTP/HTTPS)", "value": "status" },
+                            { "label": "Keyword", "value": "keyword" },
+                            { "label": "Ping", "value": "ping" },
+                            { "label": "Port", "value": "port" },
+                            { "label": "Heartbeat", "value": "heartbeat" }
+                        ]
+                    },
+                    "pronounceable_name": {
+                        "type": "text",
+                        "label": "Monitor Name",
+                        "index": 3,
+                        "tooltip": "Human-readable name for the monitor"
+                    },
+                    "check_frequency": {
+                        "type": "number",
+                        "label": "Check Frequency (seconds)",
+                        "index": 4,
+                        "defaultValue": 60,
+                        "tooltip": "How often to check the monitor in seconds (minimum 30)"
+                    },
+                    "call": {
+                        "type": "toggle",
+                        "label": "Phone Call Alerts",
+                        "index": 5,
+                        "defaultValue": false,
+                        "tooltip": "Enable phone call notifications"
+                    },
+                    "sms": {
+                        "type": "toggle",
+                        "label": "SMS Alerts",
+                        "index": 6,
+                        "defaultValue": false,
+                        "tooltip": "Enable SMS notifications"
+                    },
+                    "email": {
+                        "type": "toggle",
+                        "label": "Email Alerts",
+                        "index": 7,
+                        "defaultValue": true,
+                        "tooltip": "Enable email notifications"
+                    },
+                    "push": {
+                        "type": "toggle",
+                        "label": "Push Notifications",
+                        "index": 8,
+                        "defaultValue": false,
+                        "tooltip": "Enable push notifications"
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "Monitor ID", "value": "id" },
+                { "label": "Monitor Type", "value": "type" },
+                { "label": "URL", "value": "url" },
+                { "label": "Pronounceable Name", "value": "pronounceable_name" },
+                { "label": "Status", "value": "status" },
+                { "label": "Check Frequency", "value": "check_frequency" },
+                { "label": "Created At", "value": "created_at" },
+                { "label": "Updated At", "value": "updated_at" }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxMiIgZmlsbD0iIzFGMjkzNyIvPgogIDxwYXRoIGQ9Ik0yMCAyOEgyOE0zNiAyOEg0NE0yMCAzNkgyOE0zNiAzNkg0NCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxyZWN0IHg9IjE2IiB5PSIyMCIgd2lkdGg9IjMyIiBoZWlnaHQ9IjI0IiByeD0iNCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+"
+}

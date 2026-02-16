@@ -1,0 +1,118 @@
+{
+    "name": "appmixer.betterstack.uptime.UpdateMonitor",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Update an existing monitor in Better Stack Uptime.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:betterstack"
+    },
+    "quota": {
+        "manager": "appmixer:betterstack",
+        "resources": "requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "monitorId": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    },
+                    "pronounceable_name": {
+                        "type": "string"
+                    },
+                    "check_frequency": {
+                        "type": "integer"
+                    },
+                    "call": {
+                        "type": "boolean"
+                    },
+                    "sms": {
+                        "type": "boolean"
+                    },
+                    "email": {
+                        "type": "boolean"
+                    },
+                    "push": {
+                        "type": "boolean"
+                    },
+                    "paused": {
+                        "type": "boolean"
+                    }
+                },
+                "required": ["monitorId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "monitorId": {
+                        "type": "text",
+                        "label": "Monitor ID",
+                        "index": 1,
+                        "tooltip": "The unique identifier of the monitor to update"
+                    },
+                    "url": {
+                        "type": "text",
+                        "label": "URL",
+                        "index": 2,
+                        "tooltip": "The URL to monitor"
+                    },
+                    "pronounceable_name": {
+                        "type": "text",
+                        "label": "Monitor Name",
+                        "index": 3,
+                        "tooltip": "Human-readable name for the monitor"
+                    },
+                    "check_frequency": {
+                        "type": "number",
+                        "label": "Check Frequency (seconds)",
+                        "index": 4,
+                        "tooltip": "How often to check the monitor in seconds"
+                    },
+                    "call": {
+                        "type": "toggle",
+                        "label": "Phone Call Alerts",
+                        "index": 5,
+                        "tooltip": "Enable phone call notifications"
+                    },
+                    "sms": {
+                        "type": "toggle",
+                        "label": "SMS Alerts",
+                        "index": 6,
+                        "tooltip": "Enable SMS notifications"
+                    },
+                    "email": {
+                        "type": "toggle",
+                        "label": "Email Alerts",
+                        "index": 7,
+                        "tooltip": "Enable email notifications"
+                    },
+                    "push": {
+                        "type": "toggle",
+                        "label": "Push Notifications",
+                        "index": 8,
+                        "tooltip": "Enable push notifications"
+                    },
+                    "paused": {
+                        "type": "toggle",
+                        "label": "Paused",
+                        "index": 9,
+                        "tooltip": "Pause or resume the monitor"
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out"
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxMiIgZmlsbD0iIzFGMjkzNyIvPgogIDxwYXRoIGQ9Ik0yMCAyOEgyOE0zNiAyOEg0NE0yMCAzNkgyOE0zNiAzNkg0NCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxyZWN0IHg9IjE2IiB5PSIyMCIgd2lkdGg9IjMyIiBoZWlnaHQ9IjI0IiByeD0iNCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+"
+}

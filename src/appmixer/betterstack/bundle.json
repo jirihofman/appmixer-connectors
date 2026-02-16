@@ -1,0 +1,9 @@
+{
+    "name": "appmixer.betterstack",
+    "version": "1.0.0",
+    "changelog": {
+        "1.0.0": [
+            "Initial release with uptime monitoring components: CreateMonitor, GetMonitor, UpdateMonitor, DeleteMonitor, ListMonitors, GetIncident, ListIncidents, UpdateIncident, CreateHeartbeat, and ListHeartbeats."
+        ]
+    }
+}

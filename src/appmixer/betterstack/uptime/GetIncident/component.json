@@ -1,0 +1,57 @@
+{
+    "name": "appmixer.betterstack.uptime.GetIncident",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Retrieve a specific incident by its ID from Better Stack Uptime.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:betterstack"
+    },
+    "quota": {
+        "manager": "appmixer:betterstack",
+        "resources": "requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "incidentId": {
+                        "type": "string"
+                    }
+                },
+                "required": ["incidentId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "incidentId": {
+                        "type": "text",
+                        "label": "Incident ID",
+                        "index": 1,
+                        "tooltip": "The unique identifier of the incident"
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "Incident ID", "value": "id" },
+                { "label": "Type", "value": "type" },
+                { "label": "Name", "value": "name" },
+                { "label": "Cause", "value": "cause" },
+                { "label": "Started At", "value": "started_at" },
+                { "label": "Resolved At", "value": "resolved_at" },
+                { "label": "Acknowledged At", "value": "acknowledged_at" },
+                { "label": "Response Time", "value": "response_time" },
+                { "label": "Response Status", "value": "response_status" }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8cmVjdCB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHJ4PSIxMiIgZmlsbD0iIzFGMjkzNyIvPgogIDxwYXRoIGQ9Ik0yMCAyOEgyOE0zNiAyOEg0NE0yMCAzNkgyOE0zNiAzNkg0NCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxyZWN0IHg9IjE2IiB5PSIyMCIgd2lkdGg9IjMyIiBoZWlnaHQ9IjI0IiByeD0iNCIgc3Ryb2tlPSIjMTVDRDcyIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+"
+}
