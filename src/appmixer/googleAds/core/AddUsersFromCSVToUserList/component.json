@@ -1,0 +1,169 @@
+{
+    "name": "appmixer.googleAds.core.AddUsersFromCSVToUserList",
+    "description": "Adds users from a CSV file to a Google Ads Customer Match user list in batches. Uses continuation to process large files within Appmixer execution limits.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:googleAds",
+        "scope": [
+            "https://www.googleapis.com/auth/adwords"
+        ]
+    },
+    "quota": {
+        "manager": "appmixer:googleAds",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "customerId": {
+                        "type": "string"
+                    },
+                    "developerToken": {
+                        "type": "string"
+                    },
+                    "loginCustomerId": {
+                        "type": "string"
+                    },
+                    "userListId": {
+                        "type": "string"
+                    },
+                    "userListResourceName": {
+                        "type": "string"
+                    },
+                    "fileId": {
+                        "type": "string"
+                    },
+                    "delimiter": {
+                        "type": "string"
+                    },
+                    "adUserDataConsent": {
+                        "type": "string"
+                    },
+                    "adPersonalizationConsent": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "customerId",
+                    "developerToken",
+                    "fileId"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "customerId": {
+                        "type": "text",
+                        "label": "Customer ID",
+                        "index": 1
+                    },
+                    "developerToken": {
+                        "type": "text",
+                        "label": "Developer Token",
+                        "index": 2
+                    },
+                    "loginCustomerId": {
+                        "type": "text",
+                        "label": "Login Customer ID",
+                        "tooltip": "Required when authenticating via a manager (MCC) account.",
+                        "index": 3
+                    },
+                    "userListId": {
+                        "type": "text",
+                        "label": "User List ID",
+                        "tooltip": "Numeric ID of the Customer Match user list. Use either User List ID or User List Resource Name.",
+                        "index": 4
+                    },
+                    "userListResourceName": {
+                        "type": "text",
+                        "label": "User List Resource Name",
+                        "tooltip": "Full resource name, e.g. customers/123/userLists/456. Use either this or User List ID.",
+                        "index": 5
+                    },
+                    "fileId": {
+                        "type": "filepicker",
+                        "label": "CSV File",
+                        "tooltip": "CSV file with headers such as email, phoneNumber, firstName, lastName, countryCode, postalCode, mobileId, thirdPartyUserId.",
+                        "index": 6
+                    },
+                    "delimiter": {
+                        "type": "text",
+                        "label": "CSV Delimiter",
+                        "defaultValue": ",",
+                        "index": 7
+                    },
+                    "adUserDataConsent": {
+                        "type": "select",
+                        "label": "Ad User Data Consent",
+                        "tooltip": "Consent status for use of user data for ads. Recommended for uploads.",
+                        "index": 8,
+                        "options": [
+                            { "label": "Unspecified", "value": "UNSPECIFIED" },
+                            { "label": "Unknown", "value": "UNKNOWN" },
+                            { "label": "Granted", "value": "GRANTED" },
+                            { "label": "Denied", "value": "DENIED" }
+                        ]
+                    },
+                    "adPersonalizationConsent": {
+                        "type": "select",
+                        "label": "Ad Personalization Consent",
+                        "tooltip": "Consent status for ad personalization. Recommended for uploads.",
+                        "index": 9,
+                        "options": [
+                            { "label": "Unspecified", "value": "UNSPECIFIED" },
+                            { "label": "Unknown", "value": "UNKNOWN" },
+                            { "label": "Granted", "value": "GRANTED" },
+                            { "label": "Denied", "value": "DENIED" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "User List Resource Name",
+                    "value": "userListResourceName",
+                    "schema": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "label": "Received Operations Count",
+                    "value": "receivedOperationsCount",
+                    "schema": {
+                        "type": "integer"
+                    }
+                },
+                {
+                    "label": "Number of Entries",
+                    "value": "numTotalEntries",
+                    "schema": {
+                        "type": "integer"
+                    }
+                },
+                {
+                    "label": "Number of Invalid Entries",
+                    "value": "numInvalidEntries",
+                    "schema": {
+                        "type": "integer"
+                    }
+                },
+                {
+                    "label": "Invalid Entry Samples",
+                    "value": "invalidEntrySamples",
+                    "schema": {
+                        "type": "array"
+                    }
+                }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTYiIGhlaWdodD0iMjMwIiBwcmVzZXJ2ZVJhdGlvPSJ4TWlkWU1pZCI+PHBhdGggZmlsbD0iI0ZCQkMwNCIgZD0iTTUuODg4IDE2Ni40MDUgOTAuODggMjAuOWMxMC43OTYgNi4zNTYgNjUuMjM2IDM2LjQ4NCA3NC4wMjggNDIuMjE0TDc5LjkxNiAyMDguNjI3Yy05LjI5NSAxMi4yOC04NS44MDQtMjMuNTg3LTc0LjAyOC00Mi4yM3oiLz48cGF0aCBmaWxsPSIjNDI4NUY0IiBkPSJNMjUwLjA4NCAxNjYuNDAyIDE2NS4wOTIgMjAuOTA2QzE1My4yMSAxLjEzMiAxMjcuNjItNi4wNTQgMTA2LjYwMSA1LjYyNVM3OS4xODIgNDIuNDYyIDkxLjA2NCA2My4xMTlsODQuOTkyIDE0NS41MTRjMTEuODgyIDE5Ljc2NSAzNy40NzMgMjYuOTUgNTguNDkyIDE1LjI3MiAyMC4xLTExLjY4IDI3LjQxOC0zNy43MyAxNS41MzYtNTcuNDg2eiIvPjxlbGxpcHNlIGN4PSI0Mi42NjQiIGN5PSIxODcuOTI0IiBmaWxsPSIjMzRBODUzIiByeD0iNDIuNjY0IiByeT0iNDEuNjA0Ii8+PC9zdmc+"
+}
