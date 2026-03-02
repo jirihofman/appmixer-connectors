@@ -91,5 +91,10 @@ describe('AddUsersFromCSVToUserList', () => {
         assert.strictEqual(context.setTimeout.callCount, 1);
         assert.strictEqual(context.sendJson.callCount, 0);
         assert.strictEqual(context.httpRequest.callCount, 0);
+        const timeoutPayload = context.setTimeout.getCall(0).args[0];
+        assert.strictEqual(timeoutPayload.processedRows, 0);
+        assert.strictEqual(timeoutPayload.receivedOperationsCount, 0);
+        assert.strictEqual(timeoutPayload.numInvalidEntries, 0);
+        assert.strictEqual(timeoutPayload.userListResourceName, 'customers/7107133715/userLists/9329730810');
     });
 });

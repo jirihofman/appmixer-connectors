@@ -3,6 +3,8 @@
 const readline = require('readline');
 const lib = require('../../lib');
 
+const MAX_INVALID_SAMPLES = 20;
+
 module.exports = {
 
     async receive(context) {
@@ -151,7 +153,7 @@ module.exports = {
 
                 if (!userData) {
                     numInvalidEntries += 1;
-                    if (invalidEntrySamples.length < 20) {
+                    if (invalidEntrySamples.length < MAX_INVALID_SAMPLES) {
                         invalidEntrySamples.push(row);
                     }
                     continue;
@@ -225,7 +227,7 @@ function buildUserDataFromRow(row, adUserDataConsent, adPersonalizationConsent) 
     }
 
     if (phoneNumber) {
-        const normalizedPhone = String(phoneNumber).replace(/[^0-9+]/g, '').toLowerCase();
+        const normalizedPhone = String(phoneNumber).replace(/[^0-9+]/g, '');
         if (normalizedPhone) {
             userIdentifiers.push({ hashedPhoneNumber: lib.hashSha256(normalizedPhone) });
         }
