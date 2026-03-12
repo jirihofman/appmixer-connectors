@@ -1,0 +1,409 @@
+{
+  "version": "1.0.0",
+  "description": "Component classification taxonomy for Appmixer connectors. This system helps AI agents understand component patterns and generate better code.",
+  "categories": {
+    "component-type": {
+      "description": "Primary type/purpose of the component",
+      "tags": {
+        "action": {
+          "description": "Standard action component that performs an operation when triggered",
+          "characteristics": [
+            "Has inPorts defined",
+            "Executes on receiving input",
+            "Does not have 'tick' or 'webhook' properties",
+            "Typically implements receive() method"
+          ],
+          "examples": ["CreateIssue", "UpdateBoard", "DeleteUser", "SendMessage"]
+        },
+        "find": {
+          "description": "Search/query component that finds items based on criteria",
+          "characteristics": [
+            "Component name typically starts with 'Find'",
+            "Returns array of items matching search criteria",
+            "Usually has 'outputType' selector",
+            "May have 'notFound' output port",
+            "Implements search/query parameters",
+            "No pagination (returns max items per page)",
+            "Often uses dynamic output schema"
+          ],
+          "examples": ["FindIssues", "FindNotes", "FindDeals", "FindContacts"]
+        },
+        "list": {
+          "description": "Component that retrieves all items of a specific type",
+          "characteristics": [
+            "Component name typically starts with 'List'",
+            "Returns all items without filtering",
+            "Usually has 'outputType' selector",
+            "May implement pagination internally",
+            "Often uses dynamic output schema"
+          ],
+          "examples": ["ListProjects", "ListGroups", "ListCalendars", "ListEvents"]
+        },
+        "get": {
+          "description": "Retrieves a single item by unique identifier",
+          "characteristics": [
+            "Component name typically starts with 'Get'",
+            "Requires ID parameter",
+            "Returns single item",
+            "Throws error if not found"
+          ],
+          "examples": ["GetIssue", "GetUser", "GetProject", "GetBoard"]
+        },
+        "create": {
+          "description": "Creates a new item in the external service",
+          "characteristics": [
+            "Component name typically starts with 'Create'",
+            "Returns created item with ID",
+            "Has required fields for creation",
+            "May have dynamic input fields"
+          ],
+          "examples": ["CreateIssue", "CreateTask", "CreateNote", "CreateDeal"]
+        },
+        "update": {
+          "description": "Updates an existing item",
+          "characteristics": [
+            "Component name typically starts with 'Update'",
+            "Requires ID parameter",
+            "Returns empty object or updated item",
+            "Has at least one required input (ID)"
+          ],
+          "examples": ["UpdateIssue", "UpdateBoard", "UpdateContact", "UpdateTask"]
+        },
+        "delete": {
+          "description": "Deletes an item by identifier",
+          "characteristics": [
+            "Component name typically starts with 'Delete'",
+            "Requires ID parameter",
+            "Returns empty object",
+            "Has at least one required input (ID)",
+            "Must have outPorts: ['out']"
+          ],
+          "examples": ["DeleteIssue", "DeleteTask", "DeleteNote", "DeleteBoard"]
+        },
+        "trigger": {
+          "description": "Component that triggers workflows on events",
+          "characteristics": [
+            "Has 'trigger: true' in manifest",
+            "No inPorts defined",
+            "Uses 'properties' for configuration",
+            "Typically implements tick() or webhook() methods",
+            "Component name often starts with 'New' or 'Updated'"
+          ],
+          "examples": ["NewIssue", "UpdatedContact", "NewMessage", "TaskCreated"]
+        },
+        "webhook": {
+          "description": "Trigger component using webhooks for real-time events",
+          "characteristics": [
+            "Has 'webhook: true' in manifest",
+            "Implements start(), receive(), stop() methods",
+            "Uses context.getWebhookUrl()",
+            "Registers/unregisters webhooks with external service",
+            "Returns context.response() after processing webhook"
+          ],
+          "examples": ["NewIssueWebhook", "UpdatedContactWebhook", "MessageReceivedWebhook"]
+        },
+        "polling": {
+          "description": "Trigger component using polling mechanism",
+          "characteristics": [
+            "Has 'tick: true' in manifest",
+            "Implements tick() method",
+            "Uses state management to track known items",
+            "Polls external API at regular intervals",
+            "Compares current state with previous to detect changes"
+          ],
+          "examples": ["NewIssue", "UpdatedItem", "NewContact"]
+        },
+        "utility": {
+          "description": "Helper component that provides auxiliary functionality",
+          "characteristics": [
+            "Provides metadata or configuration options",
+            "May not interact with external APIs directly",
+            "Used by other components via 'source' property"
+          ],
+          "examples": ["IssueMetadata", "GenerateOutput", "Transformers"]
+        }
+      }
+    },
+    "input-output": {
+      "description": "Input/output characteristics of the component",
+      "tags": {
+        "dynamic-inputs": {
+          "description": "Component has dynamically generated input fields",
+          "characteristics": [
+            "Input fields generated based on external data",
+            "Uses 'source.url' in inPorts definition",
+            "Often depends on other field selections",
+            "Common in Create/Update components"
+          ],
+          "examples": ["CreateIssue with dynamic fields based on issue type"]
+        },
+        "dynamic-outputs": {
+          "description": "Component has dynamically generated output fields",
+          "characteristics": [
+            "Output schema generated at runtime",
+            "Uses 'source.url' in outPorts definition",
+            "Output fields depend on configuration or external data",
+            "Common in Find/List/Get components"
+          ],
+          "examples": ["FindIssues with fields based on Jira configuration"]
+        },
+        "source-inputs": {
+          "description": "Uses source property to populate input field options",
+          "characteristics": [
+            "Has 'source.url' in inspector inputs",
+            "Dropdown/select fields populated from other components",
+            "May include transform functions",
+            "Enables cascading dropdowns"
+          ],
+          "examples": ["Channel selection populated from ListChannels"]
+        },
+        "output-type": {
+          "description": "Has outputType selector for different output formats",
+          "characteristics": [
+            "Has 'outputType' field in schema",
+            "Supports multiple output modes: array, first, object, file",
+            "Uses lib.sendArrayOutput() helper",
+            "Uses lib.getOutputPortOptions() for dynamic schema"
+          ],
+          "examples": ["FindIssues", "ListProjects", "FindNotes"]
+        },
+        "has-properties": {
+          "description": "Uses properties field instead of inPorts for configuration",
+          "characteristics": [
+            "Trigger components typically use this pattern",
+            "Configuration known before flow runs",
+            "Cannot use data from previous components",
+            "Defined in 'properties' section of manifest"
+          ],
+          "examples": ["NewIssue with project filter in properties"]
+        },
+        "file-input": {
+          "description": "Accepts file inputs",
+          "characteristics": [
+            "Has input field with type 'filepicker'",
+            "Schema uses format 'data-url'",
+            "Handles file uploads"
+          ],
+          "examples": ["UploadFile", "CreateDocument"]
+        },
+        "file-output": {
+          "description": "Produces file outputs",
+          "characteristics": [
+            "Uses context.saveFileStream()",
+            "Returns fileId in output",
+            "May return additional metadata like fileSize",
+            "Output includes file-related fields"
+          ],
+          "examples": ["ExportData", "GenerateReport", "DownloadFile"]
+        },
+        "multiple-inputs": {
+          "description": "Component has multiple input ports",
+          "characteristics": [
+            "Defines multiple items in inPorts array",
+            "Each port can receive different types of data",
+            "Less common pattern"
+          ],
+          "examples": ["Components with separate config and data inputs"]
+        },
+        "multiple-outputs": {
+          "description": "Component has multiple output ports",
+          "characteristics": [
+            "Defines multiple items in outPorts array",
+            "Different outputs for different scenarios",
+            "Common: 'out' and 'notFound' or 'error'"
+          ],
+          "examples": ["FindComponents with 'out' and 'notFound' ports"]
+        }
+      }
+    },
+    "technical-features": {
+      "description": "Technical implementation features and patterns",
+      "tags": {
+        "caching": {
+          "description": "Uses caching mechanisms for performance",
+          "characteristics": [
+            "Uses context.staticCache",
+            "Implements cache TTL",
+            "Often combined with locking",
+            "Reduces API calls"
+          ],
+          "examples": ["Components caching folder structures or property lists"]
+        },
+        "quota-managed": {
+          "description": "Has quota management configuration",
+          "characteristics": [
+            "Has 'quota' section in manifest",
+            "Specifies quota manager and resources",
+            "Implements rate limiting",
+            "Has maxWait timeout"
+          ],
+          "examples": ["Most API-calling components"]
+        },
+        "requires-auth": {
+          "description": "Requires authentication",
+          "characteristics": [
+            "Has 'auth' section in manifest",
+            "Specifies auth service",
+            "May include required scopes"
+          ],
+          "examples": ["All components accessing external APIs"]
+        },
+        "oauth": {
+          "description": "Uses OAuth authentication",
+          "characteristics": [
+            "auth.js file with type: 'oauth2'",
+            "Implements OAuth flow",
+            "Has token refresh mechanism"
+          ],
+          "examples": ["Google, Slack, GitHub components"]
+        },
+        "api-key": {
+          "description": "Uses API key authentication",
+          "characteristics": [
+            "auth.js file with type: 'apiKey'",
+            "Simple token-based authentication",
+            "May include domain/subdomain"
+          ],
+          "examples": ["Freshdesk, Jira (basic auth) components"]
+        },
+        "state-management": {
+          "description": "Uses state for data persistence",
+          "characteristics": [
+            "Uses context.loadState() and context.saveState()",
+            "Tracks component state between executions",
+            "Common in trigger components",
+            "Used for deduplication"
+          ],
+          "examples": ["Polling triggers tracking known items"]
+        },
+        "locking": {
+          "description": "Uses locking mechanisms for concurrency control",
+          "characteristics": [
+            "Uses context.lock()",
+            "Prevents race conditions",
+            "Often used with cache operations",
+            "Implements lock TTL and retry logic"
+          ],
+          "examples": ["Long-running tick operations, cache updates"]
+        },
+        "batching": {
+          "description": "Implements batching logic for bulk operations",
+          "characteristics": [
+            "Processes multiple items in batches",
+            "Uses Promise.all() for concurrent requests",
+            "Optimizes API usage",
+            "Common in recursive operations"
+          ],
+          "examples": ["Recursive folder traversal components"]
+        },
+        "pagination": {
+          "description": "Handles paginated API responses",
+          "characteristics": [
+            "Implements pagination logic",
+            "May use cursor-based or offset-based pagination",
+            "Fetches all pages internally",
+            "Returns aggregated results"
+          ],
+          "examples": ["List components fetching all items"]
+        },
+        "error-handling": {
+          "description": "Has specific error handling logic",
+          "characteristics": [
+            "Uses try-catch blocks",
+            "Throws context.CancelError for user errors",
+            "May have retry logic",
+            "Validates inputs"
+          ],
+          "examples": ["Most components with validation"]
+        },
+        "transformation": {
+          "description": "Uses data transformation functions",
+          "characteristics": [
+            "Has transform functions in separate file or inline",
+            "Converts API responses to UI-friendly format",
+            "Uses 'transform' property in source definitions",
+            "Common pattern: toSelectArray functions"
+          ],
+          "examples": ["Components with dropdown options from API data"]
+        },
+        "deduplication": {
+          "description": "Implements deduplication logic",
+          "characteristics": [
+            "Uses context.staticCache for short-term dedup",
+            "Uses state for long-term tracking",
+            "Common in webhook triggers",
+            "Often combined with locking"
+          ],
+          "examples": ["Webhook triggers preventing duplicate events"]
+        },
+        "variable-fetch": {
+          "description": "Supports variableFetch mode for dynamic data sources",
+          "characteristics": [
+            "Handles variableFetch property",
+            "Returns empty response on error in UI context",
+            "Throws errors normally in flow context",
+            "Used when component provides data for dropdowns"
+          ],
+          "examples": ["List components used as data sources"]
+        }
+      }
+    },
+    "complexity": {
+      "description": "Component complexity level",
+      "tags": {
+        "simple": {
+          "description": "Simple component with straightforward logic",
+          "characteristics": [
+            "Single API call",
+            "No complex state management",
+            "Minimal error handling",
+            "Few input fields"
+          ]
+        },
+        "moderate": {
+          "description": "Moderate complexity with some advanced features",
+          "characteristics": [
+            "Multiple API calls",
+            "Basic state or cache management",
+            "Dynamic inputs or outputs",
+            "Standard error handling"
+          ]
+        },
+        "complex": {
+          "description": "Complex component with advanced features",
+          "characteristics": [
+            "Multiple API calls with dependencies",
+            "Advanced state management",
+            "Locking mechanisms",
+            "Complex transformation logic",
+            "Batching or pagination"
+          ]
+        }
+      }
+    }
+  },
+  "usage": {
+    "purpose": "This classification system helps AI agents understand component patterns and characteristics, enabling them to generate better code for new components by referencing similar existing components.",
+    "benefits": [
+      "Consistent component architecture across connectors",
+      "Better code generation by AI agents",
+      "Easier onboarding for new developers",
+      "Pattern documentation and best practices",
+      "Simplified component discovery and search"
+    ],
+    "for_ai_agents": {
+      "instructions": [
+        "When creating a new component, first identify its type and characteristics",
+        "Search for similar components with matching tags",
+        "Use the found components as reference templates",
+        "Follow the patterns and best practices from classified components",
+        "Ensure new component follows the characteristics of its tags"
+      ],
+      "examples": [
+        "Creating a Find component? Look for tags: find, output-type, dynamic-outputs, quota-managed",
+        "Creating a webhook trigger? Look for tags: trigger, webhook, state-management, deduplication",
+        "Creating a Create component with dynamic fields? Look for tags: create, dynamic-inputs, source-inputs, transformation"
+      ]
+    }
+  }
+}

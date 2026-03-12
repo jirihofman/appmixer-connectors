@@ -12,6 +12,28 @@ This repository contains the officially maintained connectors for Appmixer. They
 ## Getting Started
 To learn how to create custom connectors, refer to our comprehensive guide: [Creating Custom Connectors](https://docs.appmixer.com/getting-started/custom-connectors).
 
+## Component Classification System
+The repository includes a comprehensive [Component Classification System](COMPONENT_CLASSIFICATION.md) that helps developers and AI agents understand component patterns and best practices. The system categorizes components by:
+- **Type**: action, find, list, trigger, webhook, etc.
+- **Features**: dynamic inputs/outputs, caching, authentication, etc.
+- **Complexity**: simple, moderate, or complex
+
+Use the classification system to:
+- Find reference components when building new ones
+- Understand common patterns and best practices
+- Enable AI agents to generate better code
+
+**Quick Start:**
+```bash
+# Analyze a component
+node scripts/classify-component.js src/appmixer/jira/issues/CreateIssue/component.json
+
+# View statistics
+node scripts/classify-component.js --statistics
+```
+
+See [COMPONENT_CLASSIFICATION.md](COMPONENT_CLASSIFICATION.md) for detailed documentation.
+
 ## Contribution Guidelines
 We welcome contributions from the community! To contribute:
 1. Fork the repository.
