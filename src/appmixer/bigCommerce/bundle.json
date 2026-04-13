@@ -1,7 +1,10 @@
 {
     "name": "appmixer.bigCommerce",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "changelog": {
+        "1.0.4": [
+            "Added MakeApiCall component for making arbitrary authenticated API calls to BigCommerce API."
+        ],
         "1.0.3": [
             "Initial version"
         ]
