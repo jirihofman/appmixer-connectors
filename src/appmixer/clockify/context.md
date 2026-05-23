@@ -7,14 +7,12 @@ Clockify is a time tracking, project management, scheduling, expense, approval, 
 Primary Appmixer use cases:
 - Create projects, clients, tasks, and time entries from upstream workflow events.
 - Sync tracked time to downstream reporting, billing, or data warehouse tools.
-- React to new or changed time tracking events through Clockify webhooks.
 - Retrieve workspace/project/task context for conditional workflow routing.
 
 ## Official Documentation
 
 - API reference: https://docs.clockify.me/
 - Developer API reference mirror: https://docs.developer.clockify.me/
-- API and webhook settings help: https://clockify.me/help/administration/api-webhook-settings
 
 ## Authentication Research
 
@@ -64,19 +62,10 @@ Implementation note: List/Find components should support Appmixer `outputType` a
 
 - Help Center documents a Free plan API limit of 30 requests per hour per workspace.
 - API docs document `X-Addon-Token` rate limiting of 50 requests per second per add-on per workspace.
-- Webhooks are available on Free and paid plans, but only workspace owners/admins can manage webhook settings.
-
-### Webhook Limits
-
-- Free plan: up to 3 webhooks.
-- Basic, Standard, Pro: up to 10 webhooks per user, 100 total per workspace.
-- Enterprise: up to 100 webhooks per user, 300 total per workspace.
-
 ## API Surface Summary
 
 Core resources available in the public REST API:
 - User and Workspace: current user, workspace list/detail, workspace users.
-- Webhooks: create/list/get/update/delete webhook configurations; event logs; rotate webhook token.
 - Clients: list/create/get/update/delete clients.
 - Projects: list/create/get/update/delete projects; memberships; rates; estimates; templates.
 - Tasks: list/create/get/update/delete tasks within a project; rates.
@@ -102,11 +91,10 @@ Core resources available in the public REST API:
 | Time entries | `/v1/workspaces/{workspaceId}/user/{userId}/time-entries` | GET | https://docs.clockify.me/#tag/Time-entry/operation/getTimeEntries |
 | Create time entry | `/v1/workspaces/{workspaceId}/time-entries` | POST | https://docs.clockify.me/#tag/Time-entry/operation/createTimeEntry |
 | Stop running timer | `/v1/workspaces/{workspaceId}/user/{userId}/time-entries` | PATCH | https://docs.clockify.me/#tag/Time-entry/operation/stopRunningTimeEntry |
-| Create webhook | `/v1/workspaces/{workspaceId}/webhooks` | POST | https://docs.clockify.me/#tag/Webhooks/operation/createWebhook |
 
 ## Proposed Phase 1 Components
 
-Maximum initial scope: 10 actions and 3 triggers.
+Maximum initial scope: 10 actions.
 
 ### Actions
 
@@ -123,14 +111,6 @@ Maximum initial scope: 10 actions and 3 triggers.
 | `FindTimeEntries` | Find | `/v1/workspaces/{workspaceId}/user/{userId}/time-entries` | GET | Date range filters are essential; use outputType and `notFound`. |
 | `CreateTimeEntry` | Create | `/v1/workspaces/{workspaceId}/time-entries` | POST | Manual time entry with start/end, project, task, tags, billable flag, description. |
 
-### Triggers
-
-| Component | Mechanism | Event | Notes |
-| --- | --- | --- | --- |
-| `NewTimeEntry` | Webhook | `NEW_TIME_ENTRY` | Preferred over polling if webhook setup is allowed by the authenticated user. |
-| `TimeEntryUpdated` | Webhook | `TIME_ENTRY_UPDATED` | Covers edits to tracked time; include webhook token validation if Clockify sends token headers/body. |
-| `TimerStopped` | Webhook | `TIMER_STOPPED` | Useful for downstream billing/reporting workflows. |
-
 ### Later Components
 
 Good phase 2 candidates:
@@ -142,7 +122,7 @@ Good phase 2 candidates:
 
 ## Implementation Plan
 
-1. Scaffold `src/appmixer/clockify` with `service.json`, `bundle.json`, `auth.js`, `lib.js`, `quota.js`, and component directories grouped by resource (`user`, `workspace`, `client`, `project`, `task`, `timeEntry`, `triggers`).
+1. Scaffold `src/appmixer/clockify` with `service.json`, `bundle.json`, `auth.js`, `lib.js`, `quota.js`, and component directories grouped by resource (`user`, `workspace`, `client`, `project`, `task`, `timeEntry`).
 2. Implement `auth.js` as `type: 'apiKey'` with `apiKey` and optional base URL fields. Validate credentials with `GET /v1/user?include-memberships=true` and `X-Api-Key`.
 3. Add `lib.js` helpers:
    - `request(context, options)` to prepend `apiBaseUrl`, inject `X-Api-Key`, normalize errors, and support absolute URLs.
@@ -151,13 +131,11 @@ Good phase 2 candidates:
 4. Implement phase 1 actions in the order listed above. Start with `GetCurrentUser` and `ListWorkspaces` so component tests can discover IDs for E2E flows.
 5. Use JSON Schema outPorts with realistic `example` values on leaf fields. Do not mix `schema` and `options` on one outPort.
 6. For Find/List components, implement `outputType` support and `notFound` ports for Find components.
-7. Implement webhook triggers only after confirming the Appmixer connector webhook route pattern to use in this repo. Triggers should create/delete Clockify webhooks in `start()`/`stop()` when possible and handle workspace plan/user permission errors clearly.
-8. Add focused unit tests for each component with the repo Appmixer test stub. Add E2E flow artifacts later with required `BeforeAll`, `Assert`, `AfterAll`, and `ProcessE2EResults` steps per repo instructions.
-9. Run `npm run validate` and relevant unit tests before opening the PR.
+7. Add focused unit tests for each component with the repo Appmixer test stub. Add E2E flow artifacts later with required `BeforeAll`, `Assert`, `AfterAll`, and `ProcessE2EResults` steps per repo instructions.
+8. Run `npm run validate` and relevant unit tests before opening the PR.
 
 ## Open Questions / Risks
 
 - Clockify API key auth is user-managed, so the connector cannot silently provision credentials for users. The auth UI must explain the Profile settings path clearly.
 - Regional and subdomain workspaces can require non-default API hosts. The connector should expose `apiBaseUrl` from the start to avoid locking users to the global endpoint.
-- Webhook triggers require workspace owner/admin permissions and plan-based limits. If webhook creation fails due to permissions, consider polling fallbacks for `NewTimeEntry` and `TimeEntryUpdated`.
 - Report endpoints use different base URLs than regular API endpoints. Keep report components out of phase 1 unless URL handling is explicitly designed.
