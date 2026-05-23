@@ -1,0 +1,72 @@
+{
+    "name": "appmixer.clockify.core.FindClients",
+    "label": "Find Clients",
+    "description": "Finds Clockify clients in a workspace.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "workspaceId": { "type": "string" },
+                    "name": { "type": "string" },
+                    "archived": { "type": "boolean" },
+                    "strictNameSearch": { "type": "boolean" },
+                    "outputType": { "type": "string" }
+                },
+                "required": ["workspaceId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "workspaceId": { "type": "text", "label": "Workspace ID", "tooltip": "Clockify workspace ID.", "index": 1 },
+                    "name": { "type": "text", "label": "Name", "tooltip": "Filter clients by name.", "index": 2 },
+                    "archived": { "type": "toggle", "label": "Archived", "tooltip": "Filter archived clients.", "index": 3 },
+                    "strictNameSearch": { "type": "toggle", "label": "Strict Name Search", "tooltip": "Only return clients with an exact name match.", "index": 4, "defaultValue": false },
+                    "outputType": {
+                        "type": "select",
+                        "label": "Output Type",
+                        "tooltip": "Choose whether to return all records at once, first item only, one item at a time, or a CSV file.",
+                        "index": 5,
+                        "defaultValue": "array",
+                        "options": [
+                            { "label": "First Item Only", "value": "first" },
+                            { "label": "All items at once", "value": "array" },
+                            { "label": "One item at a time", "value": "object" },
+                            { "label": "Store to CSV file", "value": "file" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "source": {
+                "url": "/component/appmixer/clockify/core/FindClients?outPort=out&ignoreAuth=true",
+                "data": {
+                    "properties": {
+                        "generateOutputPortOptions": true
+                    },
+                    "messages": {
+                        "in/workspaceId": "inputs/in/workspaceId",
+                        "in/outputType": "inputs/in/outputType"
+                    }
+                }
+            }
+        },
+        {
+            "name": "notFound"
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

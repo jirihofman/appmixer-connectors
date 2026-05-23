@@ -1,0 +1,61 @@
+{
+    "name": "appmixer.clockify.core.GetCurrentUser",
+    "label": "Get Current User",
+    "description": "Retrieves the currently authenticated Clockify user.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "includeMemberships": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "inspector": {
+                "inputs": {
+                    "includeMemberships": {
+                        "type": "toggle",
+                        "label": "Include Memberships",
+                        "tooltip": "If enabled, the response includes workspace and project memberships.",
+                        "index": 1,
+                        "defaultValue": false
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "title": "User ID", "example": "5a0ab5acb07987125438b60f" },
+                    "name": { "type": "string", "title": "Name", "example": "John Doe" },
+                    "email": { "type": "string", "title": "Email", "example": "john.doe@example.com" },
+                    "activeWorkspace": { "type": "string", "title": "Active Workspace", "example": "64a687e29ae1f428e7ebe303" },
+                    "defaultWorkspace": { "type": "string", "title": "Default Workspace", "example": "64a687e29ae1f428e7ebe303" },
+                    "status": { "type": "string", "title": "Status", "example": "ACTIVE" },
+                    "profilePicture": { "type": "string", "title": "Profile Picture", "example": "https://www.url.com/profile-picture1234567890.png" },
+                    "memberships": {
+                        "type": "array",
+                        "title": "Memberships",
+                        "example": []
+                    }
+                }
+            }
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

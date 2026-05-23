@@ -1,0 +1,59 @@
+{
+    "name": "appmixer.clockify.core.ListWorkspaces",
+    "label": "List Workspaces",
+    "description": "Lists all Clockify workspaces available to the authenticated user.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "outputType": { "type": "string" }
+                }
+            },
+            "inspector": {
+                "inputs": {
+                    "outputType": {
+                        "type": "select",
+                        "label": "Output Type",
+                        "tooltip": "Choose whether to return all records at once, first item only, one item at a time, or a CSV file.",
+                        "index": 1,
+                        "defaultValue": "array",
+                        "options": [
+                            { "label": "First Item Only", "value": "first" },
+                            { "label": "All items at once", "value": "array" },
+                            { "label": "One item at a time", "value": "object" },
+                            { "label": "Store to CSV file", "value": "file" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "source": {
+                "url": "/component/appmixer/clockify/core/ListWorkspaces?outPort=out&ignoreAuth=true",
+                "data": {
+                    "properties": {
+                        "generateOutputPortOptions": true
+                    },
+                    "messages": {
+                        "in/outputType": "inputs/in/outputType"
+                    }
+                }
+            }
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

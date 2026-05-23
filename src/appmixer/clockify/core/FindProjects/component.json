@@ -1,0 +1,87 @@
+{
+    "name": "appmixer.clockify.core.FindProjects",
+    "label": "Find Projects",
+    "description": "Finds Clockify projects in a workspace.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "workspaceId": { "type": "string" },
+                    "name": { "type": "string" },
+                    "clientId": { "type": "string" },
+                    "archived": { "type": "boolean" },
+                    "billable": { "type": "boolean" },
+                    "access": { "type": "string" },
+                    "strictNameSearch": { "type": "boolean" },
+                    "outputType": { "type": "string" }
+                },
+                "required": ["workspaceId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "workspaceId": { "type": "text", "label": "Workspace ID", "tooltip": "Clockify workspace ID.", "index": 1 },
+                    "name": { "type": "text", "label": "Name", "tooltip": "Filter projects by name.", "index": 2 },
+                    "clientId": { "type": "text", "label": "Client ID", "tooltip": "Filter projects by client ID.", "index": 3 },
+                    "archived": { "type": "toggle", "label": "Archived", "tooltip": "Only return archived projects.", "index": 4 },
+                    "billable": { "type": "toggle", "label": "Billable", "tooltip": "Only return billable projects.", "index": 5 },
+                    "access": {
+                        "type": "select",
+                        "label": "Access",
+                        "tooltip": "Filter projects by access level.",
+                        "index": 6,
+                        "options": [
+                            { "label": "Public", "value": "PUBLIC" },
+                            { "label": "Private", "value": "PRIVATE" }
+                        ]
+                    },
+                    "strictNameSearch": { "type": "toggle", "label": "Strict Name Search", "tooltip": "Only return projects with an exact name match.", "index": 7, "defaultValue": false },
+                    "outputType": {
+                        "type": "select",
+                        "label": "Output Type",
+                        "tooltip": "Choose whether to return all records at once, first item only, one item at a time, or a CSV file.",
+                        "index": 8,
+                        "defaultValue": "array",
+                        "options": [
+                            { "label": "First Item Only", "value": "first" },
+                            { "label": "All items at once", "value": "array" },
+                            { "label": "One item at a time", "value": "object" },
+                            { "label": "Store to CSV file", "value": "file" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "source": {
+                "url": "/component/appmixer/clockify/core/FindProjects?outPort=out&ignoreAuth=true",
+                "data": {
+                    "properties": {
+                        "generateOutputPortOptions": true
+                    },
+                    "messages": {
+                        "in/workspaceId": "inputs/in/workspaceId",
+                        "in/outputType": "inputs/in/outputType"
+                    }
+                }
+            }
+        },
+        {
+            "name": "notFound"
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

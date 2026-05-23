@@ -1,0 +1,48 @@
+{
+    "name": "appmixer.clockify.core.CreateClient",
+    "label": "Create Client",
+    "description": "Creates a new Clockify client in a workspace.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "workspaceId": { "type": "string" },
+                    "name": { "type": "string" }
+                },
+                "required": ["workspaceId", "name"]
+            },
+            "inspector": {
+                "inputs": {
+                    "workspaceId": { "type": "text", "label": "Workspace ID", "tooltip": "Clockify workspace ID.", "index": 1 },
+                    "name": { "type": "text", "label": "Name", "tooltip": "Client name.", "index": 2 }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "title": "Client ID", "example": "98h687e29ae1f428e7ebe707" },
+                    "name": { "type": "string", "title": "Name", "example": "Acme Corporation" },
+                    "archived": { "type": "boolean", "title": "Archived", "example": false },
+                    "workspaceId": { "type": "string", "title": "Workspace ID", "example": "64a687e29ae1f428e7ebe303" }
+                }
+            }
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

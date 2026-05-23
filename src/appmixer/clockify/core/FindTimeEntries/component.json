@@ -1,0 +1,81 @@
+{
+    "name": "appmixer.clockify.core.FindTimeEntries",
+    "label": "Find Time Entries",
+    "description": "Finds Clockify time entries for a user in a workspace.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "workspaceId": { "type": "string" },
+                    "userId": { "type": "string" },
+                    "description": { "type": "string" },
+                    "start": { "type": "string" },
+                    "end": { "type": "string" },
+                    "projectId": { "type": "string" },
+                    "taskId": { "type": "string" },
+                    "tagIds": { "type": "string" },
+                    "outputType": { "type": "string" }
+                },
+                "required": ["workspaceId", "userId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "workspaceId": { "type": "text", "label": "Workspace ID", "tooltip": "Clockify workspace ID.", "index": 1 },
+                    "userId": { "type": "text", "label": "User ID", "tooltip": "Clockify user ID.", "index": 2 },
+                    "description": { "type": "text", "label": "Description", "tooltip": "Search by time entry description.", "index": 3 },
+                    "start": { "type": "date-time", "label": "Start", "tooltip": "Return entries starting at or after this date and time.", "index": 4 },
+                    "end": { "type": "date-time", "label": "End", "tooltip": "Return entries ending at or before this date and time.", "index": 5 },
+                    "projectId": { "type": "text", "label": "Project ID", "tooltip": "Filter by project ID.", "index": 6 },
+                    "taskId": { "type": "text", "label": "Task ID", "tooltip": "Filter by task ID.", "index": 7 },
+                    "tagIds": { "type": "text", "label": "Tag IDs", "tooltip": "Comma-separated tag IDs.", "index": 8 },
+                    "outputType": {
+                        "type": "select",
+                        "label": "Output Type",
+                        "tooltip": "Choose whether to return all records at once, first item only, one item at a time, or a CSV file.",
+                        "index": 9,
+                        "defaultValue": "array",
+                        "options": [
+                            { "label": "First Item Only", "value": "first" },
+                            { "label": "All items at once", "value": "array" },
+                            { "label": "One item at a time", "value": "object" },
+                            { "label": "Store to CSV file", "value": "file" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "source": {
+                "url": "/component/appmixer/clockify/core/FindTimeEntries?outPort=out&ignoreAuth=true",
+                "data": {
+                    "properties": {
+                        "generateOutputPortOptions": true
+                    },
+                    "messages": {
+                        "in/workspaceId": "inputs/in/workspaceId",
+                        "in/userId": "inputs/in/userId",
+                        "in/outputType": "inputs/in/outputType"
+                    }
+                }
+            }
+        },
+        {
+            "name": "notFound"
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

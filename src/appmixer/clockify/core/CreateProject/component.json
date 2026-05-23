@@ -1,0 +1,59 @@
+{
+    "name": "appmixer.clockify.core.CreateProject",
+    "label": "Create Project",
+    "description": "Creates a new Clockify project in a workspace.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "workspaceId": { "type": "string" },
+                    "name": { "type": "string" },
+                    "clientId": { "type": "string" },
+                    "billable": { "type": "boolean" },
+                    "isPublic": { "type": "boolean" },
+                    "color": { "type": "string" }
+                },
+                "required": ["workspaceId", "name"]
+            },
+            "inspector": {
+                "inputs": {
+                    "workspaceId": { "type": "text", "label": "Workspace ID", "tooltip": "Clockify workspace ID.", "index": 1 },
+                    "name": { "type": "text", "label": "Name", "tooltip": "Project name.", "index": 2 },
+                    "clientId": { "type": "text", "label": "Client ID", "tooltip": "Optional client ID.", "index": 3 },
+                    "billable": { "type": "toggle", "label": "Billable", "tooltip": "Whether the project is billable.", "index": 4 },
+                    "isPublic": { "type": "toggle", "label": "Public", "tooltip": "Whether the project is public to workspace members.", "index": 5 },
+                    "color": { "type": "text", "label": "Color", "tooltip": "Project color, for example #03A9F4.", "index": 6 }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "title": "Project ID", "example": "25b687e29ae1f428e7ebe123" },
+                    "name": { "type": "string", "title": "Name", "example": "Website Redesign" },
+                    "clientId": { "type": "string", "title": "Client ID", "example": "98h687e29ae1f428e7ebe707" },
+                    "workspaceId": { "type": "string", "title": "Workspace ID", "example": "64a687e29ae1f428e7ebe303" },
+                    "billable": { "type": "boolean", "title": "Billable", "example": true },
+                    "archived": { "type": "boolean", "title": "Archived", "example": false },
+                    "color": { "type": "string", "title": "Color", "example": "#03A9F4" }
+                }
+            }
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

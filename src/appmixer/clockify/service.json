@@ -1,0 +1,8 @@
+{
+    "name": "appmixer.clockify",
+    "label": "Clockify",
+    "category": "applications",
+    "description": "Clockify is a time tracking and productivity platform for tracking work hours, managing clients, projects, tasks, and time entries.",
+    "version": "1.0.0",
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

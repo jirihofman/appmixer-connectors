@@ -1,0 +1,70 @@
+{
+    "name": "appmixer.clockify.core.CreateTask",
+    "label": "Create Task",
+    "description": "Creates a new Clockify task in a project.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "workspaceId": { "type": "string" },
+                    "projectId": { "type": "string" },
+                    "name": { "type": "string" },
+                    "assigneeIds": { "type": "string" },
+                    "billable": { "type": "boolean" },
+                    "estimate": { "type": "string" },
+                    "status": { "type": "string" }
+                },
+                "required": ["workspaceId", "projectId", "name"]
+            },
+            "inspector": {
+                "inputs": {
+                    "workspaceId": { "type": "text", "label": "Workspace ID", "tooltip": "Clockify workspace ID.", "index": 1 },
+                    "projectId": { "type": "text", "label": "Project ID", "tooltip": "Clockify project ID.", "index": 2 },
+                    "name": { "type": "text", "label": "Name", "tooltip": "Task name.", "index": 3 },
+                    "assigneeIds": { "type": "text", "label": "Assignee IDs", "tooltip": "Comma-separated user IDs to assign.", "index": 4 },
+                    "billable": { "type": "toggle", "label": "Billable", "tooltip": "Whether the task is billable.", "index": 5 },
+                    "estimate": { "type": "text", "label": "Estimate", "tooltip": "Task estimate duration, for example PT1H30M.", "index": 6 },
+                    "status": {
+                        "type": "select",
+                        "label": "Status",
+                        "tooltip": "Task status.",
+                        "index": 7,
+                        "options": [
+                            { "label": "Active", "value": "ACTIVE" },
+                            { "label": "Done", "value": "DONE" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "title": "Task ID", "example": "57a687e29ae1f428e7ebe107" },
+                    "name": { "type": "string", "title": "Name", "example": "Bugfixing" },
+                    "projectId": { "type": "string", "title": "Project ID", "example": "25b687e29ae1f428e7ebe123" },
+                    "status": { "type": "string", "title": "Status", "example": "ACTIVE" },
+                    "assigneeIds": { "type": "array", "title": "Assignee IDs", "example": ["45b687e29ae1f428e7ebe123"] },
+                    "billable": { "type": "boolean", "title": "Billable", "example": true },
+                    "estimate": { "type": "string", "title": "Estimate", "example": "PT1H30M" }
+                }
+            }
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

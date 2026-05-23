@@ -1,0 +1,82 @@
+{
+    "name": "appmixer.clockify.core.FindTasks",
+    "label": "Find Tasks",
+    "description": "Finds Clockify tasks in a project.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "workspaceId": { "type": "string" },
+                    "projectId": { "type": "string" },
+                    "name": { "type": "string" },
+                    "status": { "type": "string" },
+                    "outputType": { "type": "string" }
+                },
+                "required": ["workspaceId", "projectId"]
+            },
+            "inspector": {
+                "inputs": {
+                    "workspaceId": { "type": "text", "label": "Workspace ID", "tooltip": "Clockify workspace ID.", "index": 1 },
+                    "projectId": { "type": "text", "label": "Project ID", "tooltip": "Clockify project ID.", "index": 2 },
+                    "name": { "type": "text", "label": "Name", "tooltip": "Filter tasks by name.", "index": 3 },
+                    "status": {
+                        "type": "select",
+                        "label": "Status",
+                        "tooltip": "Filter tasks by status.",
+                        "index": 4,
+                        "options": [
+                            { "label": "Active", "value": "ACTIVE" },
+                            { "label": "Done", "value": "DONE" }
+                        ]
+                    },
+                    "outputType": {
+                        "type": "select",
+                        "label": "Output Type",
+                        "tooltip": "Choose whether to return all records at once, first item only, one item at a time, or a CSV file.",
+                        "index": 5,
+                        "defaultValue": "array",
+                        "options": [
+                            { "label": "First Item Only", "value": "first" },
+                            { "label": "All items at once", "value": "array" },
+                            { "label": "One item at a time", "value": "object" },
+                            { "label": "Store to CSV file", "value": "file" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "source": {
+                "url": "/component/appmixer/clockify/core/FindTasks?outPort=out&ignoreAuth=true",
+                "data": {
+                    "properties": {
+                        "generateOutputPortOptions": true
+                    },
+                    "messages": {
+                        "in/workspaceId": "inputs/in/workspaceId",
+                        "in/projectId": "inputs/in/projectId",
+                        "in/outputType": "inputs/in/outputType"
+                    }
+                }
+            }
+        },
+        {
+            "name": "notFound"
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}

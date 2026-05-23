@@ -1,0 +1,86 @@
+{
+    "name": "appmixer.clockify.core.CreateTimeEntry",
+    "label": "Create Time Entry",
+    "description": "Creates a new Clockify time entry.",
+    "author": "Appmixer <info@appmixer.com>",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:clockify"
+    },
+    "quota": {
+        "manager": "appmixer:clockify",
+        "resources": "requests"
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "workspaceId": { "type": "string" },
+                    "start": { "type": "string" },
+                    "end": { "type": "string" },
+                    "projectId": { "type": "string" },
+                    "taskId": { "type": "string" },
+                    "tagIds": { "type": "string" },
+                    "description": { "type": "string" },
+                    "billable": { "type": "boolean" },
+                    "type": { "type": "string" }
+                },
+                "required": ["workspaceId", "start"]
+            },
+            "inspector": {
+                "inputs": {
+                    "workspaceId": { "type": "text", "label": "Workspace ID", "tooltip": "Clockify workspace ID.", "index": 1 },
+                    "start": { "type": "date-time", "label": "Start", "tooltip": "Start date and time in ISO 8601 format.", "index": 2 },
+                    "end": { "type": "date-time", "label": "End", "tooltip": "End date and time in ISO 8601 format. Leave empty to create a running entry where supported.", "index": 3 },
+                    "projectId": { "type": "text", "label": "Project ID", "tooltip": "Optional project ID.", "index": 4 },
+                    "taskId": { "type": "text", "label": "Task ID", "tooltip": "Optional task ID.", "index": 5 },
+                    "tagIds": { "type": "text", "label": "Tag IDs", "tooltip": "Comma-separated tag IDs.", "index": 6 },
+                    "description": { "type": "textarea", "label": "Description", "tooltip": "Time entry description.", "index": 7 },
+                    "billable": { "type": "toggle", "label": "Billable", "tooltip": "Whether the time entry is billable.", "index": 8 },
+                    "type": {
+                        "type": "select",
+                        "label": "Type",
+                        "tooltip": "Time entry type.",
+                        "index": 9,
+                        "defaultValue": "REGULAR",
+                        "options": [
+                            { "label": "Regular", "value": "REGULAR" },
+                            { "label": "Break", "value": "BREAK" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "title": "Time Entry ID", "example": "64c777ddd3fcab07cfbb210c" },
+                    "description": { "type": "string", "title": "Description", "example": "This is a sample time entry description." },
+                    "userId": { "type": "string", "title": "User ID", "example": "5a0ab5acb07987125438b60f" },
+                    "projectId": { "type": "string", "title": "Project ID", "example": "25b687e29ae1f428e7ebe123" },
+                    "taskId": { "type": "string", "title": "Task ID", "example": "54m377ddd3fcab07cfbb432w" },
+                    "workspaceId": { "type": "string", "title": "Workspace ID", "example": "64a687e29ae1f428e7ebe303" },
+                    "billable": { "type": "boolean", "title": "Billable", "example": false },
+                    "tagIds": { "type": "array", "title": "Tag IDs", "example": ["321r77ddd3fcab07cfbb567y"] },
+                    "timeInterval": {
+                        "type": "object",
+                        "title": "Time Interval",
+                        "properties": {
+                            "start": { "type": "string", "title": "Start", "example": "2020-01-01T00:00:00Z" },
+                            "end": { "type": "string", "title": "End", "example": "2021-01-01T00:00:00Z" },
+                            "duration": { "type": "string", "title": "Duration", "example": "8000" }
+                        }
+                    },
+                    "type": { "type": "string", "title": "Type", "example": "REGULAR" }
+                }
+            }
+        }
+    ],
+    "icon": "https://clockify.me/downloads/clockify_logo_primary_black_margin.png"
+}
