@@ -1,0 +1,125 @@
+{
+    "name": "appmixer.azuredocumentintelligence.classifiers.MakeAPICall",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Performs an arbitrary authorized API call to Azure Document Intelligence API by specifying the resource, HTTP method, and any necessary request body, query parameters, and headers.",
+    "label": "Make API Call",
+    "auth": {
+        "service": "appmixer:azuredocumentintelligence"
+    },
+    "private": false,
+    "quota": {},
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "resource": {
+                        "type": "string"
+                    },
+                    "method": {
+                        "type": "string"
+                    },
+                    "body": {
+                        "type": ["object", "string"]
+                    },
+                    "queryParams": {
+                        "type": ["object", "string"]
+                    },
+                    "headers": {
+                        "type": ["object", "string"]
+                    }
+                },
+                "required": [
+                    "resource",
+                    "method"
+                ]
+            },
+            "inspector": {
+                "inputs": {
+                    "resource": {
+                        "type": "text",
+                        "tooltip": "The resource path to call (e.g., 'documentModels/prebuilt-invoice/analyzeResults/{resultId}' or 'documentClassifiers'). Do not include the base endpoint URL.",
+                        "label": "Resource",
+                        "index": 0
+                    },
+                    "method": {
+                        "type": "select",
+                        "tooltip": "HTTP method to use for the API call.",
+                        "label": "Method",
+                        "index": 1,
+                        "options": [
+                            { "label": "GET", "value": "GET" },
+                            { "label": "POST", "value": "POST" },
+                            { "label": "PUT", "value": "PUT" },
+                            { "label": "PATCH", "value": "PATCH" },
+                            { "label": "DELETE", "value": "DELETE" }
+                        ]
+                    },
+                    "body": {
+                        "type": "textarea",
+                        "tooltip": "Optional request body in JSON format (for POST, PUT, PATCH methods).",
+                        "label": "Body",
+                        "index": 2
+                    },
+                    "queryParams": {
+                        "type": "textarea",
+                        "tooltip": "Optional query parameters in JSON format (e.g., {\"api-version\": \"2024-11-30\"}).",
+                        "label": "Query Parameters",
+                        "index": 3
+                    },
+                    "headers": {
+                        "type": "textarea",
+                        "tooltip": "Optional additional headers in JSON format. The Ocp-Apim-Subscription-Key header is added automatically.",
+                        "label": "Headers",
+                        "index": 4
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                {
+                    "label": "Status Code",
+                    "value": "statusCode"
+                },
+                {
+                    "label": "Headers",
+                    "value": "headers",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                {
+                    "label": "Response Body",
+                    "value": "body",
+                    "schema": {
+                        "type": "object"
+                    }
+                },
+                {
+                    "label": "Full Response",
+                    "value": "response",
+                    "schema": {
+                        "type": "object",
+                        "properties": {
+                            "statusCode": {
+                                "type": "number"
+                            },
+                            "headers": {
+                                "type": "object"
+                            },
+                            "body": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAPCAYAAAA/I0V3AAAAAXNSR0IArs4c6QAAAb1JREFUOE91ks1rE1EUxX93kjTNxxhDxIK11ZaIu2wsqGhcFhfqX1AlYg0VPxeiazcuBP8EF2qrtktBERRx5c5FaytU0YXxo8HO1CQmMDXNlZmMberEu3nvcc8577xzn5y8Yyldqu40KOxrcmBXNNCVyzM1jUVDgca7ks3zxSWmxzIB4n9JCyWbF4tLnti/RLk0U9N4l5vefrZ4+b687qCTKBemq5rsDQfsffz+i9lvZZI9G61n4xnvIOcfVdSMRbplwVe74UIANythwPzNlcMt5NzDivalOuS60qFcWcUMNbh6RJGJBz/1+qjJ7ozhwW/bGxMY7hFWFT7UW1QcJT1vcXZkDSlOrWh/unddf34oQjUhRAXycWE0IeT8UU1WlWyzjoxPrWjxUBIR1zu8Bp6KsD8m3NgmuMCcq+DXrKPImUlb89nEppc87gtzPC0UUsK1H8rYFmHOadt293L6vqX5bHIT6ZNpsHcg5IPx7M057dWLvHDP0hM5M5DZl8EwF9PC0VKLW9sN36ZPOnV3WXdsjQdIqT0Rdva3b+usJ7U1ZOTmQscvbw/xbx08NsjEUIw3LYPhMLyqNCkay/wBVe+Y35LSZeAAAAAASUVORK5CYII="
+}
