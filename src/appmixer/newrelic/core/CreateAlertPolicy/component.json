@@ -1,0 +1,68 @@
+{
+    "name": "appmixer.newrelic.core.CreateAlertPolicy",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Create a new alert policy in New Relic.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:newrelic"
+    },
+    "quota": {
+        "manager": "appmixer:newrelic",
+        "resources": "api.requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "incident_preference": {
+                        "type": "string"
+                    }
+                },
+                "required": ["name"]
+            },
+            "inspector": {
+                "inputs": {
+                    "name": {
+                        "type": "text",
+                        "label": "Policy Name",
+                        "index": 1,
+                        "tooltip": "Name of the alert policy"
+                    },
+                    "incident_preference": {
+                        "type": "select",
+                        "label": "Incident Preference",
+                        "index": 2,
+                        "defaultValue": "PER_POLICY",
+                        "tooltip": "How incidents are created for violations of policy conditions",
+                        "options": [
+                            { "label": "Per Policy", "value": "PER_POLICY" },
+                            { "label": "Per Condition", "value": "PER_CONDITION" },
+                            { "label": "Per Condition and Target", "value": "PER_CONDITION_AND_TARGET" }
+                        ]
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "Policy ID", "value": "id" },
+                { "label": "Name", "value": "name" },
+                { "label": "Incident Preference", "value": "incident_preference" },
+                { "label": "Created At", "value": "created_at" },
+                { "label": "Updated At", "value": "updated_at" }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDY0IDY0Ij48cGF0aCBmaWxsPSIjMDBBQzhFIiBkPSJNMzIgMEMxNC4zIDAgMCAxNC4zIDAgMzJzMTQuMyAzMiAzMiAzMiAzMi0xNC4zIDMyLTMyUzQ5LjcgMCAzMiAwem0wIDU4LjdDMTcuMSA1OC43IDUuMyA0Ni45IDUuMyAzMlMxNy4xIDUuMyAzMiA1LjMgNTguNyAxNy4xIDU4LjcgMzIgNDYuOSA1OC43IDMyIDU4Ljd6Ii8+PHBhdGggZmlsbD0iIzAwQUM4RSIgZD0iTTMyIDE2LjJjLTguNyAwLTE1LjggNy4xLTE1LjggMTUuOHM3LjEgMTUuOCAxNS44IDE1LjggMTUuOC03LjEgMTUuOC0xNS44UzQwLjcgMTYuMiAzMiAxNi4yem0wIDI2LjNjLTUuOCAwLTEwLjUtNC43LTEwLjUtMTAuNXM0LjctMTAuNSAxMC41LTEwLjUgMTAuNSA0LjcgMTAuNSAxMC41UzM3LjggNDIuNSAzMiA0Mi41eiIvPjwvc3ZnPg=="
+}

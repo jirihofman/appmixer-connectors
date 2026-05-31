@@ -1,0 +1,90 @@
+{
+    "name": "appmixer.newrelic.core.CreateDeployment",
+    "author": "Appmixer <info@appmixer.com>",
+    "description": "Record a new deployment for an application in New Relic.",
+    "version": "1.0.0",
+    "auth": {
+        "service": "appmixer:newrelic"
+    },
+    "quota": {
+        "manager": "appmixer:newrelic",
+        "resources": "api.requests",
+        "scope": {
+            "userId": "{{userId}}"
+        }
+    },
+    "inPorts": [
+        {
+            "name": "in",
+            "schema": {
+                "type": "object",
+                "properties": {
+                    "applicationId": {
+                        "type": "integer"
+                    },
+                    "revision": {
+                        "type": "string"
+                    },
+                    "changelog": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "string"
+                    }
+                },
+                "required": ["applicationId", "revision"]
+            },
+            "inspector": {
+                "inputs": {
+                    "applicationId": {
+                        "type": "number",
+                        "label": "Application ID",
+                        "index": 1,
+                        "tooltip": "The unique identifier of the application"
+                    },
+                    "revision": {
+                        "type": "text",
+                        "label": "Revision",
+                        "index": 2,
+                        "tooltip": "A string identifying the deployed version (e.g., git commit hash, version number)"
+                    },
+                    "changelog": {
+                        "type": "textarea",
+                        "label": "Changelog",
+                        "index": 3,
+                        "tooltip": "A summary of the changes included in this deployment"
+                    },
+                    "description": {
+                        "type": "textarea",
+                        "label": "Description",
+                        "index": 4,
+                        "tooltip": "A description of the deployment"
+                    },
+                    "user": {
+                        "type": "text",
+                        "label": "User",
+                        "index": 5,
+                        "tooltip": "The user who initiated the deployment"
+                    }
+                }
+            }
+        }
+    ],
+    "outPorts": [
+        {
+            "name": "out",
+            "options": [
+                { "label": "Deployment ID", "value": "id" },
+                { "label": "Revision", "value": "revision" },
+                { "label": "Changelog", "value": "changelog" },
+                { "label": "Description", "value": "description" },
+                { "label": "User", "value": "user" },
+                { "label": "Timestamp", "value": "timestamp" }
+            ]
+        }
+    ],
+    "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgdmlld0JveD0iMCAwIDY0IDY0Ij48cGF0aCBmaWxsPSIjMDBBQzhFIiBkPSJNMzIgMEMxNC4zIDAgMCAxNC4zIDAgMzJzMTQuMyAzMiAzMiAzMiAzMi0xNC4zIDMyLTMyUzQ5LjcgMCAzMiAwem0wIDU4LjdDMTcuMSA1OC43IDUuMyA0Ni45IDUuMyAzMlMxNy4xIDUuMyAzMiA1LjMgNTguNyAxNy4xIDU4LjcgMzIgNDYuOSA1OC43IDMyIDU4Ljd6Ii8+PHBhdGggZmlsbD0iIzAwQUM4RSIgZD0iTTMyIDE2LjJjLTguNyAwLTE1LjggNy4xLTE1LjggMTUuOHM3LjEgMTUuOCAxNS44IDE1LjggMTUuOC03LjEgMTUuOC0xNS44UzQwLjcgMTYuMiAzMiAxNi4yem0wIDI2LjNjLTUuOCAwLTEwLjUtNC43LTEwLjUtMTAuNXM0LjctMTAuNSAxMC41LTEwLjUgMTAuNSA0LjcgMTAuNSAxMC41UzM3LjggNDIuNSAzMiA0Mi41eiIvPjwvc3ZnPg=="
+}
