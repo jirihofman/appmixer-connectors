@@ -15,7 +15,7 @@
         "crypto": "0.0.3",
         "form-urlencoded": "^2.0.9",
         "oauth-signature": "^1.5.0",
-        "request": "^2.79.0",
+        "request": "^2.88.2",
         "request-promise": "^4.1.1"
     }
 }

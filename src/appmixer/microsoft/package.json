@@ -6,7 +6,7 @@
         "moment": "^2.31.0",
         "onedrive-api": "1.1.1",
         "pdfjs-dist": "4.10.38",
-        "request": "^2.88.0",
+        "request": "^2.88.2",
         "request-promise": "^4.2.2"
     }
 }
