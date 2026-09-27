@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   # push:
-  #   branches: [ dev ]
+  #   branches: [ dev, chore/nonbreaking-dependencies-2026-09-27 ]
   pull_request:
-    branches: [ dev ]
+    branches: [ dev, chore/nonbreaking-dependencies-2026-09-27 ]
 
 jobs:
   build:
