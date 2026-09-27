@@ -6,7 +6,7 @@
         "check-types": "^7.4.0",
         "moment": "^2.31.0",
         "node-highrise-api": "https://github.com/clientIO/node-highrise-api.git#master",
-        "request": "^2.34.0",
+        "request": "^2.88.2",
         "request-promise": "^4.2.2"
     }
 }
