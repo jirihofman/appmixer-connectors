@@ -2,6 +2,6 @@
     "name": "appmixer.utils.filters",
     "version": "1.0.0",
     "dependencies": {
-        "moment": "^2.24.0"
+        "moment": "^2.31.0"
     }
 }

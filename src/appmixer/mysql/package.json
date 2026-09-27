@@ -2,7 +2,7 @@
   "name": "appmixer.mysql",
   "version": "0.0.1",
   "dependencies": {
-    "csv-stringify": "6.2.0",
+    "csv-stringify": "6.9.0",
     "mysql": "2.18.1"
   }
 }

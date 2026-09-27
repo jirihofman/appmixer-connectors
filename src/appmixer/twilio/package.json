@@ -2,6 +2,6 @@
   "name": "appmixer.twilio",
   "version": "0.0.1",
   "dependencies": {
-    "twilio": "3.40.0"
+    "twilio": "3.84.1"
   }
 }

@@ -2,6 +2,6 @@
   "name": "appmixer.plivo",
   "version": "0.0.2",
   "dependencies": {
-    "plivo": "4.69.3"
+    "plivo": "4.79.0"
   }
 }

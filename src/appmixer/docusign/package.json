@@ -3,6 +3,6 @@
     "author": "Harsha Surisetty <harsha@client.io>",
     "version": "0.1.0",
     "dependencies": {
-        "docusign-esign": "5.19.0"
+        "docusign-esign": "5.20.0"
     }
 }

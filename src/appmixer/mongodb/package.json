@@ -2,7 +2,7 @@
   "name": "appmixer.mongodb",
   "version": "0.0.1",
   "dependencies": {
-    "mongodb": "4.17.0",
-    "tmp": "0.2.1"
+    "mongodb": "4.17.2",
+    "tmp": "0.2.7"
   }
 }

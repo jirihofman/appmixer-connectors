@@ -4,7 +4,7 @@
     "private": true,
     "main": "Crawl.js",
     "dependencies": {
-        "apify-client": "2.0.2",
-        "tslib": "2.3.1"
+        "apify-client": "2.25.0",
+        "tslib": "2.8.1"
     }
 }

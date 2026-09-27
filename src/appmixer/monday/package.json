@@ -3,7 +3,7 @@
     "author": "Harsha Surisetty <harsha@client.io>",
     "version": "2.1.0",
     "dependencies": {
-        "monday-sdk-js": "0.5.2",
-        "form-data": "4.0.0"
+        "monday-sdk-js": "0.5.9",
+        "form-data": "4.0.6"
     }
 }

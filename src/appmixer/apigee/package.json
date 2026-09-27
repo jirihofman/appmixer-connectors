@@ -6,6 +6,6 @@
     },
     "devDependencies": {
         "archiver": "7.0.1",
-        "chai": "^6.2.1"
+        "chai": "^6.2.2"
     }
 }

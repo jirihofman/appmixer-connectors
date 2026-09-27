@@ -2,7 +2,7 @@
     "name": "appmixer.test.atf.Assert",
     "version": "1.0.0",
     "dependencies": {
-        "chai": "^4.2.0",
-        "lodash": "^4.17.15"
+        "chai": "^4.5.0",
+        "lodash": "^4.18.1"
     }
 }
